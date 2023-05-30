@@ -1,7 +1,7 @@
 
-# Welcome to your CDK Python project!
+# CDK Python for Sentistock!
 
-This is a blank project for CDK development with Python.
+This is for CDK development with Python.
 
 The `cdk.json` file tells the CDK Toolkit how to execute your app.
 
