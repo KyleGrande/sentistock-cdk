@@ -1,0 +1,2740 @@
+{
+ "Resources": {
+  "MyUserPoolD09D1D74": {
+   "Type": "AWS::Cognito::UserPool",
+   "Properties": {
+    "AccountRecoverySetting": {
+     "RecoveryMechanisms": [
+      {
+       "Name": "verified_email",
+       "Priority": 1
+      }
+     ]
+    },
+    "AdminCreateUserConfig": {
+     "AllowAdminCreateUserOnly": false
+    },
+    "AutoVerifiedAttributes": [
+     "email"
+    ],
+    "EmailVerificationMessage": "The verification code to your new account is {####}",
+    "EmailVerificationSubject": "Verify your new account",
+    "MfaConfiguration": "OFF",
+    "Policies": {
+     "PasswordPolicy": {
+      "MinimumLength": 8,
+      "RequireLowercase": true,
+      "RequireNumbers": true,
+      "RequireSymbols": true,
+      "RequireUppercase": true,
+      "TemporaryPasswordValidityDays": 7
+     }
+    },
+    "Schema": [
+     {
+      "Mutable": true,
+      "Name": "given_name",
+      "Required": true
+     }
+    ],
+    "SmsVerificationMessage": "The verification code to your new account is {####}",
+    "UsernameConfiguration": {
+     "CaseSensitive": false
+    },
+    "UserPoolName": "SentiStockUserPool",
+    "VerificationMessageTemplate": {
+     "DefaultEmailOption": "CONFIRM_WITH_CODE",
+     "EmailMessage": "The verification code to your new account is {####}",
+     "EmailSubject": "Verify your new account",
+     "SmsMessage": "The verification code to your new account is {####}"
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/MyUserPool/Resource"
+   }
+  },
+  "MyUserPoolClient4DB3315D": {
+   "Type": "AWS::Cognito::UserPoolClient",
+   "Properties": {
+    "UserPoolId": {
+     "Ref": "MyUserPoolD09D1D74"
+    },
+    "AccessTokenValidity": 60,
+    "AllowedOAuthFlows": [
+     "implicit",
+     "code"
+    ],
+    "AllowedOAuthFlowsUserPoolClient": true,
+    "AllowedOAuthScopes": [
+     "profile",
+     "phone",
+     "email",
+     "openid",
+     "aws.cognito.signin.user.admin"
+    ],
+    "CallbackURLs": [
+     "https://example.com"
+    ],
+    "ClientName": "SentiStockClient",
+    "EnableTokenRevocation": true,
+    "ExplicitAuthFlows": [
+     "ALLOW_USER_PASSWORD_AUTH",
+     "ALLOW_CUSTOM_AUTH",
+     "ALLOW_REFRESH_TOKEN_AUTH"
+    ],
+    "IdTokenValidity": 60,
+    "PreventUserExistenceErrors": "ENABLED",
+    "RefreshTokenValidity": 43200,
+    "SupportedIdentityProviders": [
+     "COGNITO"
+    ],
+    "TokenValidityUnits": {
+     "AccessToken": "minutes",
+     "IdToken": "minutes",
+     "RefreshToken": "minutes"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/MyUserPoolClient/Resource"
+   }
+  },
+  "StockQuotesFD804EA5": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "KeySchema": [
+     {
+      "AttributeName": "ticker",
+      "KeyType": "HASH"
+     }
+    ],
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "ticker",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "PointInTimeRecoverySpecification": {
+     "PointInTimeRecoveryEnabled": false
+    },
+    "TableName": "StockQuotes"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/StockQuotes/Resource"
+   }
+  },
+  "UserStocks6B32108E": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "KeySchema": [
+     {
+      "AttributeName": "user_cognito_id",
+      "KeyType": "HASH"
+     }
+    ],
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "user_cognito_id",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "PointInTimeRecoverySpecification": {
+     "PointInTimeRecoveryEnabled": false
+    },
+    "TableName": "UserStocks"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/UserStocks/Resource"
+   }
+  },
+  "getStockServiceRole23DD3B81": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/getStock/ServiceRole/Resource"
+   }
+  },
+  "getStock9F21ADF5": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "ceca5af3554c2959a45743e9de423d5d85a4ec362319bdfe0a2399a2313b3393.zip"
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "getStockServiceRole23DD3B81",
+      "Arn"
+     ]
+    },
+    "Handler": "lambda_handler.lambda_handler",
+    "Runtime": "python3.10"
+   },
+   "DependsOn": [
+    "getStockServiceRole23DD3B81"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/getStock/Resource",
+    "aws:asset:path": "asset.ceca5af3554c2959a45743e9de423d5d85a4ec362319bdfe0a2399a2313b3393",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "addUserStocksServiceRoleFBA634AE": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/addUserStocks/ServiceRole/Resource"
+   }
+  },
+  "addUserStocks7C738883": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "d1cbfec8d8a41a6af8cf42f57dcf9b3db881c28f4c9ea9547e51e4533f85d4ef.zip"
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "addUserStocksServiceRoleFBA634AE",
+      "Arn"
+     ]
+    },
+    "Handler": "lambda_handler.lambda_handler",
+    "Runtime": "python3.10"
+   },
+   "DependsOn": [
+    "addUserStocksServiceRoleFBA634AE"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/addUserStocks/Resource",
+    "aws:asset:path": "asset.d1cbfec8d8a41a6af8cf42f57dcf9b3db881c28f4c9ea9547e51e4533f85d4ef",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "targetSentimentAnalysisServiceRole5B556A7D": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/targetSentimentAnalysis/ServiceRole/Resource"
+   }
+  },
+  "targetSentimentAnalysis9547ED33": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "bf24ebbc36384b51f1b56e128a4182019deec3d2d5ad364e4cdb6ae9bd3774ab.zip"
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "targetSentimentAnalysisServiceRole5B556A7D",
+      "Arn"
+     ]
+    },
+    "Handler": "lambda_handler.lambda_handler",
+    "Runtime": "python3.10"
+   },
+   "DependsOn": [
+    "targetSentimentAnalysisServiceRole5B556A7D"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/targetSentimentAnalysis/Resource",
+    "aws:asset:path": "asset.bf24ebbc36384b51f1b56e128a4182019deec3d2d5ad364e4cdb6ae9bd3774ab",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "getTopByIndexServiceRoleE087942D": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/getTopByIndex/ServiceRole/Resource"
+   }
+  },
+  "getTopByIndex3013D48F": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "7f7cfbc49a180ddbde6661a8dab493831da0dbad7073909eb37d604e917d08fa.zip"
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "getTopByIndexServiceRoleE087942D",
+      "Arn"
+     ]
+    },
+    "Handler": "lambda_handler.lambda_handler",
+    "Runtime": "python3.10"
+   },
+   "DependsOn": [
+    "getTopByIndexServiceRoleE087942D"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/getTopByIndex/Resource",
+    "aws:asset:path": "asset.7f7cfbc49a180ddbde6661a8dab493831da0dbad7073909eb37d604e917d08fa",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "sentimentAnalysisServiceRoleFAF72CC2": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/sentimentAnalysis/ServiceRole/Resource"
+   }
+  },
+  "sentimentAnalysisDA099C55": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "899bbf388fab6b30f1be5ee530f80778cfad82ed84db356018ed6d36dcd2d822.zip"
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "sentimentAnalysisServiceRoleFAF72CC2",
+      "Arn"
+     ]
+    },
+    "Handler": "lambda_handler.lambda_handler",
+    "Runtime": "python3.10"
+   },
+   "DependsOn": [
+    "sentimentAnalysisServiceRoleFAF72CC2"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/sentimentAnalysis/Resource",
+    "aws:asset:path": "asset.899bbf388fab6b30f1be5ee530f80778cfad82ed84db356018ed6d36dcd2d822",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "getUserStocksServiceRoleEECCF8BB": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/getUserStocks/ServiceRole/Resource"
+   }
+  },
+  "getUserStocks06AC50CB": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "8903f87ee435f233b4949cccff6302ae42d0d73d0a9b151a776d253a3e177b65.zip"
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "getUserStocksServiceRoleEECCF8BB",
+      "Arn"
+     ]
+    },
+    "Handler": "lambda_handler.lambda_handler",
+    "Runtime": "python3.10"
+   },
+   "DependsOn": [
+    "getUserStocksServiceRoleEECCF8BB"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/getUserStocks/Resource",
+    "aws:asset:path": "asset.8903f87ee435f233b4949cccff6302ae42d0d73d0a9b151a776d253a3e177b65",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "removeUserStockServiceRole2A9E694B": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/removeUserStock/ServiceRole/Resource"
+   }
+  },
+  "removeUserStock836A34F9": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "bbffa68436da40ba15e0339d6e768d346635963711288902107e10e02bc5670d.zip"
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "removeUserStockServiceRole2A9E694B",
+      "Arn"
+     ]
+    },
+    "Handler": "lambda_handler.lambda_handler",
+    "Runtime": "python3.10"
+   },
+   "DependsOn": [
+    "removeUserStockServiceRole2A9E694B"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/removeUserStock/Resource",
+    "aws:asset:path": "asset.bbffa68436da40ba15e0339d6e768d346635963711288902107e10e02bc5670d",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "getTopStocksServiceRoleE285CF17": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/getTopStocks/ServiceRole/Resource"
+   }
+  },
+  "getTopStocksA7101D29": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "54f490e471c7b89fc0fef67fd58726c3d701a85396cd5b4377f10e07ec20b91f.zip"
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "getTopStocksServiceRoleE285CF17",
+      "Arn"
+     ]
+    },
+    "Handler": "lambda_handler.lambda_handler",
+    "Runtime": "python3.10"
+   },
+   "DependsOn": [
+    "getTopStocksServiceRoleE285CF17"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/getTopStocks/Resource",
+    "aws:asset:path": "asset.54f490e471c7b89fc0fef67fd58726c3d701a85396cd5b4377f10e07ec20b91f",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "updateTopByIndexServiceRole10ED5DB2": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/updateTopByIndex/ServiceRole/Resource"
+   }
+  },
+  "updateTopByIndexE36F3F04": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "c89dd45f77b3bf0709ec6b6b0bf7d309e2f691028b6918e9423352f2215676b8.zip"
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "updateTopByIndexServiceRole10ED5DB2",
+      "Arn"
+     ]
+    },
+    "Handler": "lambda_handler.lambda_handler",
+    "Runtime": "python3.10"
+   },
+   "DependsOn": [
+    "updateTopByIndexServiceRole10ED5DB2"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/updateTopByIndex/Resource",
+    "aws:asset:path": "asset.c89dd45f77b3bf0709ec6b6b0bf7d309e2f691028b6918e9423352f2215676b8",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "SentiStockApi8AD84F5D": {
+   "Type": "AWS::ApiGateway::RestApi",
+   "Properties": {
+    "Description": "API for SentiStock application",
+    "Name": "SentiStockApi"
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Resource"
+   }
+  },
+  "SentiStockApiDeploymentBDEDEC09385fd7546b7b510900d42f1c93e960f6": {
+   "Type": "AWS::ApiGateway::Deployment",
+   "Properties": {
+    "RestApiId": {
+     "Ref": "SentiStockApi8AD84F5D"
+    },
+    "Description": "API for SentiStock application"
+   },
+   "DependsOn": [
+    "SentiStockApiadduserstockOPTIONS0D065AB4",
+    "SentiStockApiadduserstockPOST01A4C521",
+    "SentiStockApiadduserstockD1ED9BB6",
+    "SentiStockApigetsentimentOPTIONSBCFE7E09",
+    "SentiStockApigetsentimentPOSTD5B3EB30",
+    "SentiStockApigetsentimentBDB62F09",
+    "SentiStockApigetstockGET83A582F5",
+    "SentiStockApigetstockOPTIONSD010E413",
+    "SentiStockApigetstock08BC4F93",
+    "SentiStockApigettargetsentimentOPTIONS20C7C7D0",
+    "SentiStockApigettargetsentimentPOST2F6D9DA8",
+    "SentiStockApigettargetsentimentBA9BE9B8",
+    "SentiStockApigettopbyindexGETAFDE21D1",
+    "SentiStockApigettopbyindexOPTIONSE3092A47",
+    "SentiStockApigettopbyindex1B39A84C",
+    "SentiStockApigettopstocksGET2A4AF4FA",
+    "SentiStockApigettopstocksOPTIONS3D2A9348",
+    "SentiStockApigettopstocks150E7A81",
+    "SentiStockApigetuserstocksGET8F9CE412",
+    "SentiStockApigetuserstocksOPTIONS81CA36E8",
+    "SentiStockApigetuserstocks0C3F8EDA",
+    "SentiStockApiremoveuserstockOPTIONS86B163FD",
+    "SentiStockApiremoveuserstockPOST02C0403A",
+    "SentiStockApiremoveuserstock34B1F757",
+    "SentiStockApiupdatetopbyindexOPTIONS7ADF0536",
+    "SentiStockApiupdatetopbyindexPOSTD43FD70A",
+    "SentiStockApiupdatetopbyindex930F1E78"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Deployment/Resource"
+   }
+  },
+  "SentiStockApiDeploymentStageprodA9F35B99": {
+   "Type": "AWS::ApiGateway::Stage",
+   "Properties": {
+    "RestApiId": {
+     "Ref": "SentiStockApi8AD84F5D"
+    },
+    "DeploymentId": {
+     "Ref": "SentiStockApiDeploymentBDEDEC09385fd7546b7b510900d42f1c93e960f6"
+    },
+    "StageName": "prod"
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/DeploymentStage.prod/Resource"
+   }
+  },
+  "SentiStockApigetstock08BC4F93": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "SentiStockApi8AD84F5D",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "getstock",
+    "RestApiId": {
+     "Ref": "SentiStockApi8AD84F5D"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Default/getstock/Resource"
+   }
+  },
+  "SentiStockApigetstockGETApiPermissionSentistockCdkStackSentiStockApi5BC419F0GETgetstockA23FF899": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "getStock9F21ADF5",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "SentiStockApi8AD84F5D"
+       },
+       "/",
+       {
+        "Ref": "SentiStockApiDeploymentStageprodA9F35B99"
+       },
+       "/GET/getstock"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Default/getstock/GET/ApiPermission.SentistockCdkStackSentiStockApi5BC419F0.GET..getstock"
+   }
+  },
+  "SentiStockApigetstockGETApiPermissionTestSentistockCdkStackSentiStockApi5BC419F0GETgetstockFA72D460": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "getStock9F21ADF5",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "SentiStockApi8AD84F5D"
+       },
+       "/test-invoke-stage/GET/getstock"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Default/getstock/GET/ApiPermission.Test.SentistockCdkStackSentiStockApi5BC419F0.GET..getstock"
+   }
+  },
+  "SentiStockApigetstockGET83A582F5": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "HttpMethod": "GET",
+    "ResourceId": {
+     "Ref": "SentiStockApigetstock08BC4F93"
+    },
+    "RestApiId": {
+     "Ref": "SentiStockApi8AD84F5D"
+    },
+    "AuthorizationType": "NONE",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "getStock9F21ADF5",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Default/getstock/GET/Resource"
+   }
+  },
+  "SentiStockApigetstockOPTIONSD010E413": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "HttpMethod": "OPTIONS",
+    "ResourceId": {
+     "Ref": "SentiStockApigetstock08BC4F93"
+    },
+    "RestApiId": {
+     "Ref": "SentiStockApi8AD84F5D"
+    },
+    "AuthorizationType": "NONE",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE'"
+       },
+       "StatusCode": "200"
+      }
+     ],
+     "PassthroughBehavior": "NEVER",
+     "RequestTemplates": {
+      "application/json": "{\"statusCode\": 200}"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Origin": true
+      },
+      "StatusCode": "200"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Default/getstock/OPTIONS/Resource"
+   }
+  },
+  "SentiStockApiadduserstockD1ED9BB6": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "SentiStockApi8AD84F5D",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "adduserstock",
+    "RestApiId": {
+     "Ref": "SentiStockApi8AD84F5D"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Default/adduserstock/Resource"
+   }
+  },
+  "SentiStockApiadduserstockPOSTApiPermissionSentistockCdkStackSentiStockApi5BC419F0POSTadduserstockC9746A17": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "addUserStocks7C738883",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "SentiStockApi8AD84F5D"
+       },
+       "/",
+       {
+        "Ref": "SentiStockApiDeploymentStageprodA9F35B99"
+       },
+       "/POST/adduserstock"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Default/adduserstock/POST/ApiPermission.SentistockCdkStackSentiStockApi5BC419F0.POST..adduserstock"
+   }
+  },
+  "SentiStockApiadduserstockPOSTApiPermissionTestSentistockCdkStackSentiStockApi5BC419F0POSTadduserstock9253EA20": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "addUserStocks7C738883",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "SentiStockApi8AD84F5D"
+       },
+       "/test-invoke-stage/POST/adduserstock"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Default/adduserstock/POST/ApiPermission.Test.SentistockCdkStackSentiStockApi5BC419F0.POST..adduserstock"
+   }
+  },
+  "SentiStockApiadduserstockPOST01A4C521": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "HttpMethod": "POST",
+    "ResourceId": {
+     "Ref": "SentiStockApiadduserstockD1ED9BB6"
+    },
+    "RestApiId": {
+     "Ref": "SentiStockApi8AD84F5D"
+    },
+    "AuthorizationType": "NONE",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "addUserStocks7C738883",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Default/adduserstock/POST/Resource"
+   }
+  },
+  "SentiStockApiadduserstockOPTIONS0D065AB4": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "HttpMethod": "OPTIONS",
+    "ResourceId": {
+     "Ref": "SentiStockApiadduserstockD1ED9BB6"
+    },
+    "RestApiId": {
+     "Ref": "SentiStockApi8AD84F5D"
+    },
+    "AuthorizationType": "NONE",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE'"
+       },
+       "StatusCode": "200"
+      }
+     ],
+     "PassthroughBehavior": "NEVER",
+     "RequestTemplates": {
+      "application/json": "{\"statusCode\": 200}"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Origin": true
+      },
+      "StatusCode": "200"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Default/adduserstock/OPTIONS/Resource"
+   }
+  },
+  "SentiStockApigettargetsentimentBA9BE9B8": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "SentiStockApi8AD84F5D",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "gettargetsentiment",
+    "RestApiId": {
+     "Ref": "SentiStockApi8AD84F5D"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Default/gettargetsentiment/Resource"
+   }
+  },
+  "SentiStockApigettargetsentimentPOSTApiPermissionSentistockCdkStackSentiStockApi5BC419F0POSTgettargetsentiment9E5D00B9": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "targetSentimentAnalysis9547ED33",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "SentiStockApi8AD84F5D"
+       },
+       "/",
+       {
+        "Ref": "SentiStockApiDeploymentStageprodA9F35B99"
+       },
+       "/POST/gettargetsentiment"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Default/gettargetsentiment/POST/ApiPermission.SentistockCdkStackSentiStockApi5BC419F0.POST..gettargetsentiment"
+   }
+  },
+  "SentiStockApigettargetsentimentPOSTApiPermissionTestSentistockCdkStackSentiStockApi5BC419F0POSTgettargetsentimentD0680122": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "targetSentimentAnalysis9547ED33",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "SentiStockApi8AD84F5D"
+       },
+       "/test-invoke-stage/POST/gettargetsentiment"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Default/gettargetsentiment/POST/ApiPermission.Test.SentistockCdkStackSentiStockApi5BC419F0.POST..gettargetsentiment"
+   }
+  },
+  "SentiStockApigettargetsentimentPOST2F6D9DA8": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "HttpMethod": "POST",
+    "ResourceId": {
+     "Ref": "SentiStockApigettargetsentimentBA9BE9B8"
+    },
+    "RestApiId": {
+     "Ref": "SentiStockApi8AD84F5D"
+    },
+    "AuthorizationType": "NONE",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "targetSentimentAnalysis9547ED33",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Default/gettargetsentiment/POST/Resource"
+   }
+  },
+  "SentiStockApigettargetsentimentOPTIONS20C7C7D0": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "HttpMethod": "OPTIONS",
+    "ResourceId": {
+     "Ref": "SentiStockApigettargetsentimentBA9BE9B8"
+    },
+    "RestApiId": {
+     "Ref": "SentiStockApi8AD84F5D"
+    },
+    "AuthorizationType": "NONE",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE'"
+       },
+       "StatusCode": "200"
+      }
+     ],
+     "PassthroughBehavior": "NEVER",
+     "RequestTemplates": {
+      "application/json": "{\"statusCode\": 200}"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Origin": true
+      },
+      "StatusCode": "200"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Default/gettargetsentiment/OPTIONS/Resource"
+   }
+  },
+  "SentiStockApigettopbyindex1B39A84C": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "SentiStockApi8AD84F5D",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "gettopbyindex",
+    "RestApiId": {
+     "Ref": "SentiStockApi8AD84F5D"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Default/gettopbyindex/Resource"
+   }
+  },
+  "SentiStockApigettopbyindexGETApiPermissionSentistockCdkStackSentiStockApi5BC419F0GETgettopbyindex02B89245": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "getTopByIndex3013D48F",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "SentiStockApi8AD84F5D"
+       },
+       "/",
+       {
+        "Ref": "SentiStockApiDeploymentStageprodA9F35B99"
+       },
+       "/GET/gettopbyindex"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Default/gettopbyindex/GET/ApiPermission.SentistockCdkStackSentiStockApi5BC419F0.GET..gettopbyindex"
+   }
+  },
+  "SentiStockApigettopbyindexGETApiPermissionTestSentistockCdkStackSentiStockApi5BC419F0GETgettopbyindexBEA12AEB": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "getTopByIndex3013D48F",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "SentiStockApi8AD84F5D"
+       },
+       "/test-invoke-stage/GET/gettopbyindex"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Default/gettopbyindex/GET/ApiPermission.Test.SentistockCdkStackSentiStockApi5BC419F0.GET..gettopbyindex"
+   }
+  },
+  "SentiStockApigettopbyindexGETAFDE21D1": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "HttpMethod": "GET",
+    "ResourceId": {
+     "Ref": "SentiStockApigettopbyindex1B39A84C"
+    },
+    "RestApiId": {
+     "Ref": "SentiStockApi8AD84F5D"
+    },
+    "AuthorizationType": "NONE",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "getTopByIndex3013D48F",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Default/gettopbyindex/GET/Resource"
+   }
+  },
+  "SentiStockApigettopbyindexOPTIONSE3092A47": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "HttpMethod": "OPTIONS",
+    "ResourceId": {
+     "Ref": "SentiStockApigettopbyindex1B39A84C"
+    },
+    "RestApiId": {
+     "Ref": "SentiStockApi8AD84F5D"
+    },
+    "AuthorizationType": "NONE",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE'"
+       },
+       "StatusCode": "200"
+      }
+     ],
+     "PassthroughBehavior": "NEVER",
+     "RequestTemplates": {
+      "application/json": "{\"statusCode\": 200}"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Origin": true
+      },
+      "StatusCode": "200"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Default/gettopbyindex/OPTIONS/Resource"
+   }
+  },
+  "SentiStockApigetsentimentBDB62F09": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "SentiStockApi8AD84F5D",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "getsentiment",
+    "RestApiId": {
+     "Ref": "SentiStockApi8AD84F5D"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Default/getsentiment/Resource"
+   }
+  },
+  "SentiStockApigetsentimentPOSTApiPermissionSentistockCdkStackSentiStockApi5BC419F0POSTgetsentiment1101648B": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "sentimentAnalysisDA099C55",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "SentiStockApi8AD84F5D"
+       },
+       "/",
+       {
+        "Ref": "SentiStockApiDeploymentStageprodA9F35B99"
+       },
+       "/POST/getsentiment"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Default/getsentiment/POST/ApiPermission.SentistockCdkStackSentiStockApi5BC419F0.POST..getsentiment"
+   }
+  },
+  "SentiStockApigetsentimentPOSTApiPermissionTestSentistockCdkStackSentiStockApi5BC419F0POSTgetsentiment662BC250": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "sentimentAnalysisDA099C55",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "SentiStockApi8AD84F5D"
+       },
+       "/test-invoke-stage/POST/getsentiment"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Default/getsentiment/POST/ApiPermission.Test.SentistockCdkStackSentiStockApi5BC419F0.POST..getsentiment"
+   }
+  },
+  "SentiStockApigetsentimentPOSTD5B3EB30": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "HttpMethod": "POST",
+    "ResourceId": {
+     "Ref": "SentiStockApigetsentimentBDB62F09"
+    },
+    "RestApiId": {
+     "Ref": "SentiStockApi8AD84F5D"
+    },
+    "AuthorizationType": "NONE",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "sentimentAnalysisDA099C55",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Default/getsentiment/POST/Resource"
+   }
+  },
+  "SentiStockApigetsentimentOPTIONSBCFE7E09": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "HttpMethod": "OPTIONS",
+    "ResourceId": {
+     "Ref": "SentiStockApigetsentimentBDB62F09"
+    },
+    "RestApiId": {
+     "Ref": "SentiStockApi8AD84F5D"
+    },
+    "AuthorizationType": "NONE",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE'"
+       },
+       "StatusCode": "200"
+      }
+     ],
+     "PassthroughBehavior": "NEVER",
+     "RequestTemplates": {
+      "application/json": "{\"statusCode\": 200}"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Origin": true
+      },
+      "StatusCode": "200"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Default/getsentiment/OPTIONS/Resource"
+   }
+  },
+  "SentiStockApigetuserstocks0C3F8EDA": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "SentiStockApi8AD84F5D",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "getuserstocks",
+    "RestApiId": {
+     "Ref": "SentiStockApi8AD84F5D"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Default/getuserstocks/Resource"
+   }
+  },
+  "SentiStockApigetuserstocksGETApiPermissionSentistockCdkStackSentiStockApi5BC419F0GETgetuserstocksB60EBF12": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "getUserStocks06AC50CB",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "SentiStockApi8AD84F5D"
+       },
+       "/",
+       {
+        "Ref": "SentiStockApiDeploymentStageprodA9F35B99"
+       },
+       "/GET/getuserstocks"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Default/getuserstocks/GET/ApiPermission.SentistockCdkStackSentiStockApi5BC419F0.GET..getuserstocks"
+   }
+  },
+  "SentiStockApigetuserstocksGETApiPermissionTestSentistockCdkStackSentiStockApi5BC419F0GETgetuserstocksD0AACAD8": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "getUserStocks06AC50CB",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "SentiStockApi8AD84F5D"
+       },
+       "/test-invoke-stage/GET/getuserstocks"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Default/getuserstocks/GET/ApiPermission.Test.SentistockCdkStackSentiStockApi5BC419F0.GET..getuserstocks"
+   }
+  },
+  "SentiStockApigetuserstocksGET8F9CE412": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "HttpMethod": "GET",
+    "ResourceId": {
+     "Ref": "SentiStockApigetuserstocks0C3F8EDA"
+    },
+    "RestApiId": {
+     "Ref": "SentiStockApi8AD84F5D"
+    },
+    "AuthorizationType": "NONE",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "getUserStocks06AC50CB",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Default/getuserstocks/GET/Resource"
+   }
+  },
+  "SentiStockApigetuserstocksOPTIONS81CA36E8": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "HttpMethod": "OPTIONS",
+    "ResourceId": {
+     "Ref": "SentiStockApigetuserstocks0C3F8EDA"
+    },
+    "RestApiId": {
+     "Ref": "SentiStockApi8AD84F5D"
+    },
+    "AuthorizationType": "NONE",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE'"
+       },
+       "StatusCode": "200"
+      }
+     ],
+     "PassthroughBehavior": "NEVER",
+     "RequestTemplates": {
+      "application/json": "{\"statusCode\": 200}"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Origin": true
+      },
+      "StatusCode": "200"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Default/getuserstocks/OPTIONS/Resource"
+   }
+  },
+  "SentiStockApiremoveuserstock34B1F757": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "SentiStockApi8AD84F5D",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "removeuserstock",
+    "RestApiId": {
+     "Ref": "SentiStockApi8AD84F5D"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Default/removeuserstock/Resource"
+   }
+  },
+  "SentiStockApiremoveuserstockPOSTApiPermissionSentistockCdkStackSentiStockApi5BC419F0POSTremoveuserstockF7EE3E75": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "removeUserStock836A34F9",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "SentiStockApi8AD84F5D"
+       },
+       "/",
+       {
+        "Ref": "SentiStockApiDeploymentStageprodA9F35B99"
+       },
+       "/POST/removeuserstock"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Default/removeuserstock/POST/ApiPermission.SentistockCdkStackSentiStockApi5BC419F0.POST..removeuserstock"
+   }
+  },
+  "SentiStockApiremoveuserstockPOSTApiPermissionTestSentistockCdkStackSentiStockApi5BC419F0POSTremoveuserstock0FEB6B9B": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "removeUserStock836A34F9",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "SentiStockApi8AD84F5D"
+       },
+       "/test-invoke-stage/POST/removeuserstock"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Default/removeuserstock/POST/ApiPermission.Test.SentistockCdkStackSentiStockApi5BC419F0.POST..removeuserstock"
+   }
+  },
+  "SentiStockApiremoveuserstockPOST02C0403A": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "HttpMethod": "POST",
+    "ResourceId": {
+     "Ref": "SentiStockApiremoveuserstock34B1F757"
+    },
+    "RestApiId": {
+     "Ref": "SentiStockApi8AD84F5D"
+    },
+    "AuthorizationType": "NONE",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "removeUserStock836A34F9",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Default/removeuserstock/POST/Resource"
+   }
+  },
+  "SentiStockApiremoveuserstockOPTIONS86B163FD": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "HttpMethod": "OPTIONS",
+    "ResourceId": {
+     "Ref": "SentiStockApiremoveuserstock34B1F757"
+    },
+    "RestApiId": {
+     "Ref": "SentiStockApi8AD84F5D"
+    },
+    "AuthorizationType": "NONE",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE'"
+       },
+       "StatusCode": "200"
+      }
+     ],
+     "PassthroughBehavior": "NEVER",
+     "RequestTemplates": {
+      "application/json": "{\"statusCode\": 200}"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Origin": true
+      },
+      "StatusCode": "200"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Default/removeuserstock/OPTIONS/Resource"
+   }
+  },
+  "SentiStockApigettopstocks150E7A81": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "SentiStockApi8AD84F5D",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "gettopstocks",
+    "RestApiId": {
+     "Ref": "SentiStockApi8AD84F5D"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Default/gettopstocks/Resource"
+   }
+  },
+  "SentiStockApigettopstocksGETApiPermissionSentistockCdkStackSentiStockApi5BC419F0GETgettopstocksE0820750": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "getTopStocksA7101D29",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "SentiStockApi8AD84F5D"
+       },
+       "/",
+       {
+        "Ref": "SentiStockApiDeploymentStageprodA9F35B99"
+       },
+       "/GET/gettopstocks"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Default/gettopstocks/GET/ApiPermission.SentistockCdkStackSentiStockApi5BC419F0.GET..gettopstocks"
+   }
+  },
+  "SentiStockApigettopstocksGETApiPermissionTestSentistockCdkStackSentiStockApi5BC419F0GETgettopstocksB52190DB": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "getTopStocksA7101D29",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "SentiStockApi8AD84F5D"
+       },
+       "/test-invoke-stage/GET/gettopstocks"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Default/gettopstocks/GET/ApiPermission.Test.SentistockCdkStackSentiStockApi5BC419F0.GET..gettopstocks"
+   }
+  },
+  "SentiStockApigettopstocksGET2A4AF4FA": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "HttpMethod": "GET",
+    "ResourceId": {
+     "Ref": "SentiStockApigettopstocks150E7A81"
+    },
+    "RestApiId": {
+     "Ref": "SentiStockApi8AD84F5D"
+    },
+    "AuthorizationType": "NONE",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "getTopStocksA7101D29",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Default/gettopstocks/GET/Resource"
+   }
+  },
+  "SentiStockApigettopstocksOPTIONS3D2A9348": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "HttpMethod": "OPTIONS",
+    "ResourceId": {
+     "Ref": "SentiStockApigettopstocks150E7A81"
+    },
+    "RestApiId": {
+     "Ref": "SentiStockApi8AD84F5D"
+    },
+    "AuthorizationType": "NONE",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE'"
+       },
+       "StatusCode": "200"
+      }
+     ],
+     "PassthroughBehavior": "NEVER",
+     "RequestTemplates": {
+      "application/json": "{\"statusCode\": 200}"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Origin": true
+      },
+      "StatusCode": "200"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Default/gettopstocks/OPTIONS/Resource"
+   }
+  },
+  "SentiStockApiupdatetopbyindex930F1E78": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "SentiStockApi8AD84F5D",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "updatetopbyindex",
+    "RestApiId": {
+     "Ref": "SentiStockApi8AD84F5D"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Default/updatetopbyindex/Resource"
+   }
+  },
+  "SentiStockApiupdatetopbyindexPOSTApiPermissionSentistockCdkStackSentiStockApi5BC419F0POSTupdatetopbyindex991E030B": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "updateTopByIndexE36F3F04",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "SentiStockApi8AD84F5D"
+       },
+       "/",
+       {
+        "Ref": "SentiStockApiDeploymentStageprodA9F35B99"
+       },
+       "/POST/updatetopbyindex"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Default/updatetopbyindex/POST/ApiPermission.SentistockCdkStackSentiStockApi5BC419F0.POST..updatetopbyindex"
+   }
+  },
+  "SentiStockApiupdatetopbyindexPOSTApiPermissionTestSentistockCdkStackSentiStockApi5BC419F0POSTupdatetopbyindex7D24B598": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "updateTopByIndexE36F3F04",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "SentiStockApi8AD84F5D"
+       },
+       "/test-invoke-stage/POST/updatetopbyindex"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Default/updatetopbyindex/POST/ApiPermission.Test.SentistockCdkStackSentiStockApi5BC419F0.POST..updatetopbyindex"
+   }
+  },
+  "SentiStockApiupdatetopbyindexPOSTD43FD70A": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "HttpMethod": "POST",
+    "ResourceId": {
+     "Ref": "SentiStockApiupdatetopbyindex930F1E78"
+    },
+    "RestApiId": {
+     "Ref": "SentiStockApi8AD84F5D"
+    },
+    "AuthorizationType": "NONE",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "updateTopByIndexE36F3F04",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Default/updatetopbyindex/POST/Resource"
+   }
+  },
+  "SentiStockApiupdatetopbyindexOPTIONS7ADF0536": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "HttpMethod": "OPTIONS",
+    "ResourceId": {
+     "Ref": "SentiStockApiupdatetopbyindex930F1E78"
+    },
+    "RestApiId": {
+     "Ref": "SentiStockApi8AD84F5D"
+    },
+    "AuthorizationType": "NONE",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE'"
+       },
+       "StatusCode": "200"
+      }
+     ],
+     "PassthroughBehavior": "NEVER",
+     "RequestTemplates": {
+      "application/json": "{\"statusCode\": 200}"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Origin": true
+      },
+      "StatusCode": "200"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/SentiStockApi/Default/updatetopbyindex/OPTIONS/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/1WPy07DMBBFv6V7xyAq8Vi2QewQUYF15ThDOsSPKB6riiL/O36kUFZzZnzv9cwdf3jktxtxdpXshkphy5d3EnJgcXRcpO0NkuXLp4OpsVax+sv88gVqhWDo+qlMAutmI7TtYuiHaBUkSYbAlNBtJ/jy4o0ktCY9XXMDk0bnYhcYCs2Xgy3+VANz26NwDsjxXSqx53svB6C9cMDEiL0gOIs5+sDRbsRsXfEZRmVnve581cXL+/xJgai3fpKQMy/NGlT4FehkuzQqFMKfLi+WgtD0SfHmafT0zx65tqZDymc2c4wwN1v+xO833w6xmrwh1MAPpf4AHkgnJq0BAAA="
+   },
+   "Metadata": {
+    "aws:cdk:path": "SentistockCdkStack/CDKMetadata/Default"
+   },
+   "Condition": "CDKMetadataAvailable"
+  }
+ },
+ "Outputs": {
+  "SentiStockApiEndpoint718A5BAE": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "SentiStockApi8AD84F5D"
+      },
+      ".execute-api.",
+      {
+       "Ref": "AWS::Region"
+      },
+      ".",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Ref": "SentiStockApiDeploymentStageprodA9F35B99"
+      },
+      "/"
+     ]
+    ]
+   }
+  }
+ },
+ "Conditions": {
+  "CDKMetadataAvailable": {
+   "Fn::Or": [
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "af-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ca-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "cn-north-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "cn-northwest-1"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-north-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-3"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "me-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "sa-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-east-2"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-west-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-west-2"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

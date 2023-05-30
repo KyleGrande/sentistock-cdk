@@ -1,0 +1,3664 @@
+{
+  "version": "tree-0.1",
+  "tree": {
+    "id": "App",
+    "path": "",
+    "children": {
+      "SentistockCdkStack": {
+        "id": "SentistockCdkStack",
+        "path": "SentistockCdkStack",
+        "children": {
+          "MyUserPool": {
+            "id": "MyUserPool",
+            "path": "SentistockCdkStack/MyUserPool",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "SentistockCdkStack/MyUserPool/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Cognito::UserPool",
+                  "aws:cdk:cloudformation:props": {
+                    "accountRecoverySetting": {
+                      "recoveryMechanisms": [
+                        {
+                          "name": "verified_email",
+                          "priority": 1
+                        }
+                      ]
+                    },
+                    "adminCreateUserConfig": {
+                      "allowAdminCreateUserOnly": false
+                    },
+                    "autoVerifiedAttributes": [
+                      "email"
+                    ],
+                    "emailVerificationMessage": "The verification code to your new account is {####}",
+                    "emailVerificationSubject": "Verify your new account",
+                    "mfaConfiguration": "OFF",
+                    "policies": {
+                      "passwordPolicy": {
+                        "temporaryPasswordValidityDays": 7,
+                        "minimumLength": 8,
+                        "requireLowercase": true,
+                        "requireUppercase": true,
+                        "requireNumbers": true,
+                        "requireSymbols": true
+                      }
+                    },
+                    "schema": [
+                      {
+                        "name": "given_name",
+                        "mutable": true,
+                        "required": true
+                      }
+                    ],
+                    "smsVerificationMessage": "The verification code to your new account is {####}",
+                    "usernameConfiguration": {
+                      "caseSensitive": false
+                    },
+                    "userPoolName": "SentiStockUserPool",
+                    "verificationMessageTemplate": {
+                      "defaultEmailOption": "CONFIRM_WITH_CODE",
+                      "emailMessage": "The verification code to your new account is {####}",
+                      "emailSubject": "Verify your new account",
+                      "smsMessage": "The verification code to your new account is {####}"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_cognito.CfnUserPool",
+                  "version": "2.78.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_cognito.UserPool",
+              "version": "2.78.0"
+            }
+          },
+          "MyUserPoolClient": {
+            "id": "MyUserPoolClient",
+            "path": "SentistockCdkStack/MyUserPoolClient",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "SentistockCdkStack/MyUserPoolClient/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Cognito::UserPoolClient",
+                  "aws:cdk:cloudformation:props": {
+                    "userPoolId": {
+                      "Ref": "MyUserPoolD09D1D74"
+                    },
+                    "accessTokenValidity": 60,
+                    "allowedOAuthFlows": [
+                      "implicit",
+                      "code"
+                    ],
+                    "allowedOAuthFlowsUserPoolClient": true,
+                    "allowedOAuthScopes": [
+                      "profile",
+                      "phone",
+                      "email",
+                      "openid",
+                      "aws.cognito.signin.user.admin"
+                    ],
+                    "callbackUrLs": [
+                      "https://example.com"
+                    ],
+                    "clientName": "SentiStockClient",
+                    "enableTokenRevocation": true,
+                    "explicitAuthFlows": [
+                      "ALLOW_USER_PASSWORD_AUTH",
+                      "ALLOW_CUSTOM_AUTH",
+                      "ALLOW_REFRESH_TOKEN_AUTH"
+                    ],
+                    "idTokenValidity": 60,
+                    "preventUserExistenceErrors": "ENABLED",
+                    "refreshTokenValidity": 43200,
+                    "supportedIdentityProviders": [
+                      "COGNITO"
+                    ],
+                    "tokenValidityUnits": {
+                      "idToken": "minutes",
+                      "accessToken": "minutes",
+                      "refreshToken": "minutes"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_cognito.CfnUserPoolClient",
+                  "version": "2.78.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_cognito.UserPoolClient",
+              "version": "2.78.0"
+            }
+          },
+          "StockQuotes": {
+            "id": "StockQuotes",
+            "path": "SentistockCdkStack/StockQuotes",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "SentistockCdkStack/StockQuotes/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::DynamoDB::Table",
+                  "aws:cdk:cloudformation:props": {
+                    "keySchema": [
+                      {
+                        "attributeName": "ticker",
+                        "keyType": "HASH"
+                      }
+                    ],
+                    "attributeDefinitions": [
+                      {
+                        "attributeName": "ticker",
+                        "attributeType": "S"
+                      }
+                    ],
+                    "billingMode": "PAY_PER_REQUEST",
+                    "pointInTimeRecoverySpecification": {
+                      "pointInTimeRecoveryEnabled": false
+                    },
+                    "tableName": "StockQuotes"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_dynamodb.CfnTable",
+                  "version": "2.78.0"
+                }
+              },
+              "ScalingRole": {
+                "id": "ScalingRole",
+                "path": "SentistockCdkStack/StockQuotes/ScalingRole",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.78.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_dynamodb.Table",
+              "version": "2.78.0"
+            }
+          },
+          "UserStocks": {
+            "id": "UserStocks",
+            "path": "SentistockCdkStack/UserStocks",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "SentistockCdkStack/UserStocks/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::DynamoDB::Table",
+                  "aws:cdk:cloudformation:props": {
+                    "keySchema": [
+                      {
+                        "attributeName": "user_cognito_id",
+                        "keyType": "HASH"
+                      }
+                    ],
+                    "attributeDefinitions": [
+                      {
+                        "attributeName": "user_cognito_id",
+                        "attributeType": "S"
+                      }
+                    ],
+                    "billingMode": "PAY_PER_REQUEST",
+                    "pointInTimeRecoverySpecification": {
+                      "pointInTimeRecoveryEnabled": false
+                    },
+                    "tableName": "UserStocks"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_dynamodb.CfnTable",
+                  "version": "2.78.0"
+                }
+              },
+              "ScalingRole": {
+                "id": "ScalingRole",
+                "path": "SentistockCdkStack/UserStocks/ScalingRole",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.78.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_dynamodb.Table",
+              "version": "2.78.0"
+            }
+          },
+          "getStock": {
+            "id": "getStock",
+            "path": "SentistockCdkStack/getStock",
+            "children": {
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "SentistockCdkStack/getStock/ServiceRole",
+                "children": {
+                  "ImportServiceRole": {
+                    "id": "ImportServiceRole",
+                    "path": "SentistockCdkStack/getStock/ServiceRole/ImportServiceRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.78.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "SentistockCdkStack/getStock/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.78.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.78.0"
+                }
+              },
+              "Code": {
+                "id": "Code",
+                "path": "SentistockCdkStack/getStock/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "SentistockCdkStack/getStock/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.AssetStaging",
+                      "version": "2.78.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "SentistockCdkStack/getStock/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                      "version": "2.78.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                  "version": "2.78.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "SentistockCdkStack/getStock/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": {
+                        "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+                      },
+                      "s3Key": "ceca5af3554c2959a45743e9de423d5d85a4ec362319bdfe0a2399a2313b3393.zip"
+                    },
+                    "role": {
+                      "Fn::GetAtt": [
+                        "getStockServiceRole23DD3B81",
+                        "Arn"
+                      ]
+                    },
+                    "handler": "lambda_handler.lambda_handler",
+                    "runtime": "python3.10"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
+                  "version": "2.78.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_lambda.Function",
+              "version": "2.78.0"
+            }
+          },
+          "addUserStocks": {
+            "id": "addUserStocks",
+            "path": "SentistockCdkStack/addUserStocks",
+            "children": {
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "SentistockCdkStack/addUserStocks/ServiceRole",
+                "children": {
+                  "ImportServiceRole": {
+                    "id": "ImportServiceRole",
+                    "path": "SentistockCdkStack/addUserStocks/ServiceRole/ImportServiceRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.78.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "SentistockCdkStack/addUserStocks/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.78.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.78.0"
+                }
+              },
+              "Code": {
+                "id": "Code",
+                "path": "SentistockCdkStack/addUserStocks/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "SentistockCdkStack/addUserStocks/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.AssetStaging",
+                      "version": "2.78.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "SentistockCdkStack/addUserStocks/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                      "version": "2.78.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                  "version": "2.78.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "SentistockCdkStack/addUserStocks/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": {
+                        "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+                      },
+                      "s3Key": "d1cbfec8d8a41a6af8cf42f57dcf9b3db881c28f4c9ea9547e51e4533f85d4ef.zip"
+                    },
+                    "role": {
+                      "Fn::GetAtt": [
+                        "addUserStocksServiceRoleFBA634AE",
+                        "Arn"
+                      ]
+                    },
+                    "handler": "lambda_handler.lambda_handler",
+                    "runtime": "python3.10"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
+                  "version": "2.78.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_lambda.Function",
+              "version": "2.78.0"
+            }
+          },
+          "targetSentimentAnalysis": {
+            "id": "targetSentimentAnalysis",
+            "path": "SentistockCdkStack/targetSentimentAnalysis",
+            "children": {
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "SentistockCdkStack/targetSentimentAnalysis/ServiceRole",
+                "children": {
+                  "ImportServiceRole": {
+                    "id": "ImportServiceRole",
+                    "path": "SentistockCdkStack/targetSentimentAnalysis/ServiceRole/ImportServiceRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.78.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "SentistockCdkStack/targetSentimentAnalysis/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.78.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.78.0"
+                }
+              },
+              "Code": {
+                "id": "Code",
+                "path": "SentistockCdkStack/targetSentimentAnalysis/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "SentistockCdkStack/targetSentimentAnalysis/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.AssetStaging",
+                      "version": "2.78.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "SentistockCdkStack/targetSentimentAnalysis/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                      "version": "2.78.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                  "version": "2.78.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "SentistockCdkStack/targetSentimentAnalysis/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": {
+                        "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+                      },
+                      "s3Key": "bf24ebbc36384b51f1b56e128a4182019deec3d2d5ad364e4cdb6ae9bd3774ab.zip"
+                    },
+                    "role": {
+                      "Fn::GetAtt": [
+                        "targetSentimentAnalysisServiceRole5B556A7D",
+                        "Arn"
+                      ]
+                    },
+                    "handler": "lambda_handler.lambda_handler",
+                    "runtime": "python3.10"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
+                  "version": "2.78.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_lambda.Function",
+              "version": "2.78.0"
+            }
+          },
+          "getTopByIndex": {
+            "id": "getTopByIndex",
+            "path": "SentistockCdkStack/getTopByIndex",
+            "children": {
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "SentistockCdkStack/getTopByIndex/ServiceRole",
+                "children": {
+                  "ImportServiceRole": {
+                    "id": "ImportServiceRole",
+                    "path": "SentistockCdkStack/getTopByIndex/ServiceRole/ImportServiceRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.78.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "SentistockCdkStack/getTopByIndex/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.78.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.78.0"
+                }
+              },
+              "Code": {
+                "id": "Code",
+                "path": "SentistockCdkStack/getTopByIndex/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "SentistockCdkStack/getTopByIndex/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.AssetStaging",
+                      "version": "2.78.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "SentistockCdkStack/getTopByIndex/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                      "version": "2.78.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                  "version": "2.78.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "SentistockCdkStack/getTopByIndex/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": {
+                        "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+                      },
+                      "s3Key": "7f7cfbc49a180ddbde6661a8dab493831da0dbad7073909eb37d604e917d08fa.zip"
+                    },
+                    "role": {
+                      "Fn::GetAtt": [
+                        "getTopByIndexServiceRoleE087942D",
+                        "Arn"
+                      ]
+                    },
+                    "handler": "lambda_handler.lambda_handler",
+                    "runtime": "python3.10"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
+                  "version": "2.78.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_lambda.Function",
+              "version": "2.78.0"
+            }
+          },
+          "sentimentAnalysis": {
+            "id": "sentimentAnalysis",
+            "path": "SentistockCdkStack/sentimentAnalysis",
+            "children": {
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "SentistockCdkStack/sentimentAnalysis/ServiceRole",
+                "children": {
+                  "ImportServiceRole": {
+                    "id": "ImportServiceRole",
+                    "path": "SentistockCdkStack/sentimentAnalysis/ServiceRole/ImportServiceRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.78.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "SentistockCdkStack/sentimentAnalysis/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.78.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.78.0"
+                }
+              },
+              "Code": {
+                "id": "Code",
+                "path": "SentistockCdkStack/sentimentAnalysis/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "SentistockCdkStack/sentimentAnalysis/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.AssetStaging",
+                      "version": "2.78.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "SentistockCdkStack/sentimentAnalysis/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                      "version": "2.78.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                  "version": "2.78.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "SentistockCdkStack/sentimentAnalysis/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": {
+                        "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+                      },
+                      "s3Key": "899bbf388fab6b30f1be5ee530f80778cfad82ed84db356018ed6d36dcd2d822.zip"
+                    },
+                    "role": {
+                      "Fn::GetAtt": [
+                        "sentimentAnalysisServiceRoleFAF72CC2",
+                        "Arn"
+                      ]
+                    },
+                    "handler": "lambda_handler.lambda_handler",
+                    "runtime": "python3.10"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
+                  "version": "2.78.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_lambda.Function",
+              "version": "2.78.0"
+            }
+          },
+          "getUserStocks": {
+            "id": "getUserStocks",
+            "path": "SentistockCdkStack/getUserStocks",
+            "children": {
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "SentistockCdkStack/getUserStocks/ServiceRole",
+                "children": {
+                  "ImportServiceRole": {
+                    "id": "ImportServiceRole",
+                    "path": "SentistockCdkStack/getUserStocks/ServiceRole/ImportServiceRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.78.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "SentistockCdkStack/getUserStocks/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.78.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.78.0"
+                }
+              },
+              "Code": {
+                "id": "Code",
+                "path": "SentistockCdkStack/getUserStocks/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "SentistockCdkStack/getUserStocks/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.AssetStaging",
+                      "version": "2.78.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "SentistockCdkStack/getUserStocks/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                      "version": "2.78.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                  "version": "2.78.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "SentistockCdkStack/getUserStocks/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": {
+                        "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+                      },
+                      "s3Key": "8903f87ee435f233b4949cccff6302ae42d0d73d0a9b151a776d253a3e177b65.zip"
+                    },
+                    "role": {
+                      "Fn::GetAtt": [
+                        "getUserStocksServiceRoleEECCF8BB",
+                        "Arn"
+                      ]
+                    },
+                    "handler": "lambda_handler.lambda_handler",
+                    "runtime": "python3.10"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
+                  "version": "2.78.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_lambda.Function",
+              "version": "2.78.0"
+            }
+          },
+          "removeUserStock": {
+            "id": "removeUserStock",
+            "path": "SentistockCdkStack/removeUserStock",
+            "children": {
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "SentistockCdkStack/removeUserStock/ServiceRole",
+                "children": {
+                  "ImportServiceRole": {
+                    "id": "ImportServiceRole",
+                    "path": "SentistockCdkStack/removeUserStock/ServiceRole/ImportServiceRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.78.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "SentistockCdkStack/removeUserStock/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.78.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.78.0"
+                }
+              },
+              "Code": {
+                "id": "Code",
+                "path": "SentistockCdkStack/removeUserStock/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "SentistockCdkStack/removeUserStock/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.AssetStaging",
+                      "version": "2.78.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "SentistockCdkStack/removeUserStock/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                      "version": "2.78.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                  "version": "2.78.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "SentistockCdkStack/removeUserStock/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": {
+                        "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+                      },
+                      "s3Key": "bbffa68436da40ba15e0339d6e768d346635963711288902107e10e02bc5670d.zip"
+                    },
+                    "role": {
+                      "Fn::GetAtt": [
+                        "removeUserStockServiceRole2A9E694B",
+                        "Arn"
+                      ]
+                    },
+                    "handler": "lambda_handler.lambda_handler",
+                    "runtime": "python3.10"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
+                  "version": "2.78.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_lambda.Function",
+              "version": "2.78.0"
+            }
+          },
+          "getTopStocks": {
+            "id": "getTopStocks",
+            "path": "SentistockCdkStack/getTopStocks",
+            "children": {
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "SentistockCdkStack/getTopStocks/ServiceRole",
+                "children": {
+                  "ImportServiceRole": {
+                    "id": "ImportServiceRole",
+                    "path": "SentistockCdkStack/getTopStocks/ServiceRole/ImportServiceRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.78.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "SentistockCdkStack/getTopStocks/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.78.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.78.0"
+                }
+              },
+              "Code": {
+                "id": "Code",
+                "path": "SentistockCdkStack/getTopStocks/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "SentistockCdkStack/getTopStocks/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.AssetStaging",
+                      "version": "2.78.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "SentistockCdkStack/getTopStocks/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                      "version": "2.78.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                  "version": "2.78.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "SentistockCdkStack/getTopStocks/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": {
+                        "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+                      },
+                      "s3Key": "54f490e471c7b89fc0fef67fd58726c3d701a85396cd5b4377f10e07ec20b91f.zip"
+                    },
+                    "role": {
+                      "Fn::GetAtt": [
+                        "getTopStocksServiceRoleE285CF17",
+                        "Arn"
+                      ]
+                    },
+                    "handler": "lambda_handler.lambda_handler",
+                    "runtime": "python3.10"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
+                  "version": "2.78.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_lambda.Function",
+              "version": "2.78.0"
+            }
+          },
+          "updateTopByIndex": {
+            "id": "updateTopByIndex",
+            "path": "SentistockCdkStack/updateTopByIndex",
+            "children": {
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "SentistockCdkStack/updateTopByIndex/ServiceRole",
+                "children": {
+                  "ImportServiceRole": {
+                    "id": "ImportServiceRole",
+                    "path": "SentistockCdkStack/updateTopByIndex/ServiceRole/ImportServiceRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.78.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "SentistockCdkStack/updateTopByIndex/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.78.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.78.0"
+                }
+              },
+              "Code": {
+                "id": "Code",
+                "path": "SentistockCdkStack/updateTopByIndex/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "SentistockCdkStack/updateTopByIndex/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.AssetStaging",
+                      "version": "2.78.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "SentistockCdkStack/updateTopByIndex/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                      "version": "2.78.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                  "version": "2.78.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "SentistockCdkStack/updateTopByIndex/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": {
+                        "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+                      },
+                      "s3Key": "c89dd45f77b3bf0709ec6b6b0bf7d309e2f691028b6918e9423352f2215676b8.zip"
+                    },
+                    "role": {
+                      "Fn::GetAtt": [
+                        "updateTopByIndexServiceRole10ED5DB2",
+                        "Arn"
+                      ]
+                    },
+                    "handler": "lambda_handler.lambda_handler",
+                    "runtime": "python3.10"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
+                  "version": "2.78.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_lambda.Function",
+              "version": "2.78.0"
+            }
+          },
+          "SentiStockApi": {
+            "id": "SentiStockApi",
+            "path": "SentistockCdkStack/SentiStockApi",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "SentistockCdkStack/SentiStockApi/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::ApiGateway::RestApi",
+                  "aws:cdk:cloudformation:props": {
+                    "description": "API for SentiStock application",
+                    "name": "SentiStockApi"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_apigateway.CfnRestApi",
+                  "version": "2.78.0"
+                }
+              },
+              "Deployment": {
+                "id": "Deployment",
+                "path": "SentistockCdkStack/SentiStockApi/Deployment",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "SentistockCdkStack/SentiStockApi/Deployment/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::ApiGateway::Deployment",
+                      "aws:cdk:cloudformation:props": {
+                        "restApiId": {
+                          "Ref": "SentiStockApi8AD84F5D"
+                        },
+                        "description": "API for SentiStock application"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_apigateway.CfnDeployment",
+                      "version": "2.78.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_apigateway.Deployment",
+                  "version": "2.78.0"
+                }
+              },
+              "DeploymentStage.prod": {
+                "id": "DeploymentStage.prod",
+                "path": "SentistockCdkStack/SentiStockApi/DeploymentStage.prod",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "SentistockCdkStack/SentiStockApi/DeploymentStage.prod/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::ApiGateway::Stage",
+                      "aws:cdk:cloudformation:props": {
+                        "restApiId": {
+                          "Ref": "SentiStockApi8AD84F5D"
+                        },
+                        "deploymentId": {
+                          "Ref": "SentiStockApiDeploymentBDEDEC09385fd7546b7b510900d42f1c93e960f6"
+                        },
+                        "stageName": "prod"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_apigateway.CfnStage",
+                      "version": "2.78.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_apigateway.Stage",
+                  "version": "2.78.0"
+                }
+              },
+              "Endpoint": {
+                "id": "Endpoint",
+                "path": "SentistockCdkStack/SentiStockApi/Endpoint",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.78.0"
+                }
+              },
+              "Default": {
+                "id": "Default",
+                "path": "SentistockCdkStack/SentiStockApi/Default",
+                "children": {
+                  "getstock": {
+                    "id": "getstock",
+                    "path": "SentistockCdkStack/SentiStockApi/Default/getstock",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "SentistockCdkStack/SentiStockApi/Default/getstock/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::ApiGateway::Resource",
+                          "aws:cdk:cloudformation:props": {
+                            "parentId": {
+                              "Fn::GetAtt": [
+                                "SentiStockApi8AD84F5D",
+                                "RootResourceId"
+                              ]
+                            },
+                            "pathPart": "getstock",
+                            "restApiId": {
+                              "Ref": "SentiStockApi8AD84F5D"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_apigateway.CfnResource",
+                          "version": "2.78.0"
+                        }
+                      },
+                      "GET": {
+                        "id": "GET",
+                        "path": "SentistockCdkStack/SentiStockApi/Default/getstock/GET",
+                        "children": {
+                          "ApiPermission.SentistockCdkStackSentiStockApi5BC419F0.GET..getstock": {
+                            "id": "ApiPermission.SentistockCdkStackSentiStockApi5BC419F0.GET..getstock",
+                            "path": "SentistockCdkStack/SentiStockApi/Default/getstock/GET/ApiPermission.SentistockCdkStackSentiStockApi5BC419F0.GET..getstock",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                              "aws:cdk:cloudformation:props": {
+                                "action": "lambda:InvokeFunction",
+                                "functionName": {
+                                  "Fn::GetAtt": [
+                                    "getStock9F21ADF5",
+                                    "Arn"
+                                  ]
+                                },
+                                "principal": "apigateway.amazonaws.com",
+                                "sourceArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":execute-api:",
+                                      {
+                                        "Ref": "AWS::Region"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "SentiStockApi8AD84F5D"
+                                      },
+                                      "/",
+                                      {
+                                        "Ref": "SentiStockApiDeploymentStageprodA9F35B99"
+                                      },
+                                      "/GET/getstock"
+                                    ]
+                                  ]
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                              "version": "2.78.0"
+                            }
+                          },
+                          "ApiPermission.Test.SentistockCdkStackSentiStockApi5BC419F0.GET..getstock": {
+                            "id": "ApiPermission.Test.SentistockCdkStackSentiStockApi5BC419F0.GET..getstock",
+                            "path": "SentistockCdkStack/SentiStockApi/Default/getstock/GET/ApiPermission.Test.SentistockCdkStackSentiStockApi5BC419F0.GET..getstock",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                              "aws:cdk:cloudformation:props": {
+                                "action": "lambda:InvokeFunction",
+                                "functionName": {
+                                  "Fn::GetAtt": [
+                                    "getStock9F21ADF5",
+                                    "Arn"
+                                  ]
+                                },
+                                "principal": "apigateway.amazonaws.com",
+                                "sourceArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":execute-api:",
+                                      {
+                                        "Ref": "AWS::Region"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "SentiStockApi8AD84F5D"
+                                      },
+                                      "/test-invoke-stage/GET/getstock"
+                                    ]
+                                  ]
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                              "version": "2.78.0"
+                            }
+                          },
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "SentistockCdkStack/SentiStockApi/Default/getstock/GET/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
+                              "aws:cdk:cloudformation:props": {
+                                "httpMethod": "GET",
+                                "resourceId": {
+                                  "Ref": "SentiStockApigetstock08BC4F93"
+                                },
+                                "restApiId": {
+                                  "Ref": "SentiStockApi8AD84F5D"
+                                },
+                                "authorizationType": "NONE",
+                                "integration": {
+                                  "type": "AWS_PROXY",
+                                  "uri": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:",
+                                        {
+                                          "Ref": "AWS::Partition"
+                                        },
+                                        ":apigateway:",
+                                        {
+                                          "Ref": "AWS::Region"
+                                        },
+                                        ":lambda:path/2015-03-31/functions/",
+                                        {
+                                          "Fn::GetAtt": [
+                                            "getStock9F21ADF5",
+                                            "Arn"
+                                          ]
+                                        },
+                                        "/invocations"
+                                      ]
+                                    ]
+                                  },
+                                  "integrationHttpMethod": "POST"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_apigateway.CfnMethod",
+                              "version": "2.78.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_apigateway.Method",
+                          "version": "2.78.0"
+                        }
+                      },
+                      "OPTIONS": {
+                        "id": "OPTIONS",
+                        "path": "SentistockCdkStack/SentiStockApi/Default/getstock/OPTIONS",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "SentistockCdkStack/SentiStockApi/Default/getstock/OPTIONS/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
+                              "aws:cdk:cloudformation:props": {
+                                "httpMethod": "OPTIONS",
+                                "resourceId": {
+                                  "Ref": "SentiStockApigetstock08BC4F93"
+                                },
+                                "restApiId": {
+                                  "Ref": "SentiStockApi8AD84F5D"
+                                },
+                                "authorizationType": "NONE",
+                                "integration": {
+                                  "type": "MOCK",
+                                  "requestTemplates": {
+                                    "application/json": "{\"statusCode\": 200}"
+                                  },
+                                  "passthroughBehavior": "NEVER",
+                                  "integrationResponses": [
+                                    {
+                                      "statusCode": "200",
+                                      "responseParameters": {
+                                        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+                                        "method.response.header.Access-Control-Allow-Origin": "'*'",
+                                        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE'"
+                                      }
+                                    }
+                                  ]
+                                },
+                                "methodResponses": [
+                                  {
+                                    "statusCode": "200",
+                                    "responseParameters": {
+                                      "method.response.header.Access-Control-Allow-Headers": true,
+                                      "method.response.header.Access-Control-Allow-Methods": true,
+                                      "method.response.header.Access-Control-Allow-Origin": true
+                                    }
+                                  }
+                                ]
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_apigateway.CfnMethod",
+                              "version": "2.78.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_apigateway.Method",
+                          "version": "2.78.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_apigateway.Resource",
+                      "version": "2.78.0"
+                    }
+                  },
+                  "adduserstock": {
+                    "id": "adduserstock",
+                    "path": "SentistockCdkStack/SentiStockApi/Default/adduserstock",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "SentistockCdkStack/SentiStockApi/Default/adduserstock/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::ApiGateway::Resource",
+                          "aws:cdk:cloudformation:props": {
+                            "parentId": {
+                              "Fn::GetAtt": [
+                                "SentiStockApi8AD84F5D",
+                                "RootResourceId"
+                              ]
+                            },
+                            "pathPart": "adduserstock",
+                            "restApiId": {
+                              "Ref": "SentiStockApi8AD84F5D"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_apigateway.CfnResource",
+                          "version": "2.78.0"
+                        }
+                      },
+                      "POST": {
+                        "id": "POST",
+                        "path": "SentistockCdkStack/SentiStockApi/Default/adduserstock/POST",
+                        "children": {
+                          "ApiPermission.SentistockCdkStackSentiStockApi5BC419F0.POST..adduserstock": {
+                            "id": "ApiPermission.SentistockCdkStackSentiStockApi5BC419F0.POST..adduserstock",
+                            "path": "SentistockCdkStack/SentiStockApi/Default/adduserstock/POST/ApiPermission.SentistockCdkStackSentiStockApi5BC419F0.POST..adduserstock",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                              "aws:cdk:cloudformation:props": {
+                                "action": "lambda:InvokeFunction",
+                                "functionName": {
+                                  "Fn::GetAtt": [
+                                    "addUserStocks7C738883",
+                                    "Arn"
+                                  ]
+                                },
+                                "principal": "apigateway.amazonaws.com",
+                                "sourceArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":execute-api:",
+                                      {
+                                        "Ref": "AWS::Region"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "SentiStockApi8AD84F5D"
+                                      },
+                                      "/",
+                                      {
+                                        "Ref": "SentiStockApiDeploymentStageprodA9F35B99"
+                                      },
+                                      "/POST/adduserstock"
+                                    ]
+                                  ]
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                              "version": "2.78.0"
+                            }
+                          },
+                          "ApiPermission.Test.SentistockCdkStackSentiStockApi5BC419F0.POST..adduserstock": {
+                            "id": "ApiPermission.Test.SentistockCdkStackSentiStockApi5BC419F0.POST..adduserstock",
+                            "path": "SentistockCdkStack/SentiStockApi/Default/adduserstock/POST/ApiPermission.Test.SentistockCdkStackSentiStockApi5BC419F0.POST..adduserstock",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                              "aws:cdk:cloudformation:props": {
+                                "action": "lambda:InvokeFunction",
+                                "functionName": {
+                                  "Fn::GetAtt": [
+                                    "addUserStocks7C738883",
+                                    "Arn"
+                                  ]
+                                },
+                                "principal": "apigateway.amazonaws.com",
+                                "sourceArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":execute-api:",
+                                      {
+                                        "Ref": "AWS::Region"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "SentiStockApi8AD84F5D"
+                                      },
+                                      "/test-invoke-stage/POST/adduserstock"
+                                    ]
+                                  ]
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                              "version": "2.78.0"
+                            }
+                          },
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "SentistockCdkStack/SentiStockApi/Default/adduserstock/POST/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
+                              "aws:cdk:cloudformation:props": {
+                                "httpMethod": "POST",
+                                "resourceId": {
+                                  "Ref": "SentiStockApiadduserstockD1ED9BB6"
+                                },
+                                "restApiId": {
+                                  "Ref": "SentiStockApi8AD84F5D"
+                                },
+                                "authorizationType": "NONE",
+                                "integration": {
+                                  "type": "AWS_PROXY",
+                                  "uri": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:",
+                                        {
+                                          "Ref": "AWS::Partition"
+                                        },
+                                        ":apigateway:",
+                                        {
+                                          "Ref": "AWS::Region"
+                                        },
+                                        ":lambda:path/2015-03-31/functions/",
+                                        {
+                                          "Fn::GetAtt": [
+                                            "addUserStocks7C738883",
+                                            "Arn"
+                                          ]
+                                        },
+                                        "/invocations"
+                                      ]
+                                    ]
+                                  },
+                                  "integrationHttpMethod": "POST"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_apigateway.CfnMethod",
+                              "version": "2.78.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_apigateway.Method",
+                          "version": "2.78.0"
+                        }
+                      },
+                      "OPTIONS": {
+                        "id": "OPTIONS",
+                        "path": "SentistockCdkStack/SentiStockApi/Default/adduserstock/OPTIONS",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "SentistockCdkStack/SentiStockApi/Default/adduserstock/OPTIONS/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
+                              "aws:cdk:cloudformation:props": {
+                                "httpMethod": "OPTIONS",
+                                "resourceId": {
+                                  "Ref": "SentiStockApiadduserstockD1ED9BB6"
+                                },
+                                "restApiId": {
+                                  "Ref": "SentiStockApi8AD84F5D"
+                                },
+                                "authorizationType": "NONE",
+                                "integration": {
+                                  "type": "MOCK",
+                                  "requestTemplates": {
+                                    "application/json": "{\"statusCode\": 200}"
+                                  },
+                                  "passthroughBehavior": "NEVER",
+                                  "integrationResponses": [
+                                    {
+                                      "statusCode": "200",
+                                      "responseParameters": {
+                                        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+                                        "method.response.header.Access-Control-Allow-Origin": "'*'",
+                                        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE'"
+                                      }
+                                    }
+                                  ]
+                                },
+                                "methodResponses": [
+                                  {
+                                    "statusCode": "200",
+                                    "responseParameters": {
+                                      "method.response.header.Access-Control-Allow-Headers": true,
+                                      "method.response.header.Access-Control-Allow-Methods": true,
+                                      "method.response.header.Access-Control-Allow-Origin": true
+                                    }
+                                  }
+                                ]
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_apigateway.CfnMethod",
+                              "version": "2.78.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_apigateway.Method",
+                          "version": "2.78.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_apigateway.Resource",
+                      "version": "2.78.0"
+                    }
+                  },
+                  "gettargetsentiment": {
+                    "id": "gettargetsentiment",
+                    "path": "SentistockCdkStack/SentiStockApi/Default/gettargetsentiment",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "SentistockCdkStack/SentiStockApi/Default/gettargetsentiment/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::ApiGateway::Resource",
+                          "aws:cdk:cloudformation:props": {
+                            "parentId": {
+                              "Fn::GetAtt": [
+                                "SentiStockApi8AD84F5D",
+                                "RootResourceId"
+                              ]
+                            },
+                            "pathPart": "gettargetsentiment",
+                            "restApiId": {
+                              "Ref": "SentiStockApi8AD84F5D"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_apigateway.CfnResource",
+                          "version": "2.78.0"
+                        }
+                      },
+                      "POST": {
+                        "id": "POST",
+                        "path": "SentistockCdkStack/SentiStockApi/Default/gettargetsentiment/POST",
+                        "children": {
+                          "ApiPermission.SentistockCdkStackSentiStockApi5BC419F0.POST..gettargetsentiment": {
+                            "id": "ApiPermission.SentistockCdkStackSentiStockApi5BC419F0.POST..gettargetsentiment",
+                            "path": "SentistockCdkStack/SentiStockApi/Default/gettargetsentiment/POST/ApiPermission.SentistockCdkStackSentiStockApi5BC419F0.POST..gettargetsentiment",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                              "aws:cdk:cloudformation:props": {
+                                "action": "lambda:InvokeFunction",
+                                "functionName": {
+                                  "Fn::GetAtt": [
+                                    "targetSentimentAnalysis9547ED33",
+                                    "Arn"
+                                  ]
+                                },
+                                "principal": "apigateway.amazonaws.com",
+                                "sourceArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":execute-api:",
+                                      {
+                                        "Ref": "AWS::Region"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "SentiStockApi8AD84F5D"
+                                      },
+                                      "/",
+                                      {
+                                        "Ref": "SentiStockApiDeploymentStageprodA9F35B99"
+                                      },
+                                      "/POST/gettargetsentiment"
+                                    ]
+                                  ]
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                              "version": "2.78.0"
+                            }
+                          },
+                          "ApiPermission.Test.SentistockCdkStackSentiStockApi5BC419F0.POST..gettargetsentiment": {
+                            "id": "ApiPermission.Test.SentistockCdkStackSentiStockApi5BC419F0.POST..gettargetsentiment",
+                            "path": "SentistockCdkStack/SentiStockApi/Default/gettargetsentiment/POST/ApiPermission.Test.SentistockCdkStackSentiStockApi5BC419F0.POST..gettargetsentiment",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                              "aws:cdk:cloudformation:props": {
+                                "action": "lambda:InvokeFunction",
+                                "functionName": {
+                                  "Fn::GetAtt": [
+                                    "targetSentimentAnalysis9547ED33",
+                                    "Arn"
+                                  ]
+                                },
+                                "principal": "apigateway.amazonaws.com",
+                                "sourceArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":execute-api:",
+                                      {
+                                        "Ref": "AWS::Region"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "SentiStockApi8AD84F5D"
+                                      },
+                                      "/test-invoke-stage/POST/gettargetsentiment"
+                                    ]
+                                  ]
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                              "version": "2.78.0"
+                            }
+                          },
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "SentistockCdkStack/SentiStockApi/Default/gettargetsentiment/POST/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
+                              "aws:cdk:cloudformation:props": {
+                                "httpMethod": "POST",
+                                "resourceId": {
+                                  "Ref": "SentiStockApigettargetsentimentBA9BE9B8"
+                                },
+                                "restApiId": {
+                                  "Ref": "SentiStockApi8AD84F5D"
+                                },
+                                "authorizationType": "NONE",
+                                "integration": {
+                                  "type": "AWS_PROXY",
+                                  "uri": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:",
+                                        {
+                                          "Ref": "AWS::Partition"
+                                        },
+                                        ":apigateway:",
+                                        {
+                                          "Ref": "AWS::Region"
+                                        },
+                                        ":lambda:path/2015-03-31/functions/",
+                                        {
+                                          "Fn::GetAtt": [
+                                            "targetSentimentAnalysis9547ED33",
+                                            "Arn"
+                                          ]
+                                        },
+                                        "/invocations"
+                                      ]
+                                    ]
+                                  },
+                                  "integrationHttpMethod": "POST"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_apigateway.CfnMethod",
+                              "version": "2.78.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_apigateway.Method",
+                          "version": "2.78.0"
+                        }
+                      },
+                      "OPTIONS": {
+                        "id": "OPTIONS",
+                        "path": "SentistockCdkStack/SentiStockApi/Default/gettargetsentiment/OPTIONS",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "SentistockCdkStack/SentiStockApi/Default/gettargetsentiment/OPTIONS/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
+                              "aws:cdk:cloudformation:props": {
+                                "httpMethod": "OPTIONS",
+                                "resourceId": {
+                                  "Ref": "SentiStockApigettargetsentimentBA9BE9B8"
+                                },
+                                "restApiId": {
+                                  "Ref": "SentiStockApi8AD84F5D"
+                                },
+                                "authorizationType": "NONE",
+                                "integration": {
+                                  "type": "MOCK",
+                                  "requestTemplates": {
+                                    "application/json": "{\"statusCode\": 200}"
+                                  },
+                                  "passthroughBehavior": "NEVER",
+                                  "integrationResponses": [
+                                    {
+                                      "statusCode": "200",
+                                      "responseParameters": {
+                                        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+                                        "method.response.header.Access-Control-Allow-Origin": "'*'",
+                                        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE'"
+                                      }
+                                    }
+                                  ]
+                                },
+                                "methodResponses": [
+                                  {
+                                    "statusCode": "200",
+                                    "responseParameters": {
+                                      "method.response.header.Access-Control-Allow-Headers": true,
+                                      "method.response.header.Access-Control-Allow-Methods": true,
+                                      "method.response.header.Access-Control-Allow-Origin": true
+                                    }
+                                  }
+                                ]
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_apigateway.CfnMethod",
+                              "version": "2.78.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_apigateway.Method",
+                          "version": "2.78.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_apigateway.Resource",
+                      "version": "2.78.0"
+                    }
+                  },
+                  "gettopbyindex": {
+                    "id": "gettopbyindex",
+                    "path": "SentistockCdkStack/SentiStockApi/Default/gettopbyindex",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "SentistockCdkStack/SentiStockApi/Default/gettopbyindex/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::ApiGateway::Resource",
+                          "aws:cdk:cloudformation:props": {
+                            "parentId": {
+                              "Fn::GetAtt": [
+                                "SentiStockApi8AD84F5D",
+                                "RootResourceId"
+                              ]
+                            },
+                            "pathPart": "gettopbyindex",
+                            "restApiId": {
+                              "Ref": "SentiStockApi8AD84F5D"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_apigateway.CfnResource",
+                          "version": "2.78.0"
+                        }
+                      },
+                      "GET": {
+                        "id": "GET",
+                        "path": "SentistockCdkStack/SentiStockApi/Default/gettopbyindex/GET",
+                        "children": {
+                          "ApiPermission.SentistockCdkStackSentiStockApi5BC419F0.GET..gettopbyindex": {
+                            "id": "ApiPermission.SentistockCdkStackSentiStockApi5BC419F0.GET..gettopbyindex",
+                            "path": "SentistockCdkStack/SentiStockApi/Default/gettopbyindex/GET/ApiPermission.SentistockCdkStackSentiStockApi5BC419F0.GET..gettopbyindex",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                              "aws:cdk:cloudformation:props": {
+                                "action": "lambda:InvokeFunction",
+                                "functionName": {
+                                  "Fn::GetAtt": [
+                                    "getTopByIndex3013D48F",
+                                    "Arn"
+                                  ]
+                                },
+                                "principal": "apigateway.amazonaws.com",
+                                "sourceArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":execute-api:",
+                                      {
+                                        "Ref": "AWS::Region"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "SentiStockApi8AD84F5D"
+                                      },
+                                      "/",
+                                      {
+                                        "Ref": "SentiStockApiDeploymentStageprodA9F35B99"
+                                      },
+                                      "/GET/gettopbyindex"
+                                    ]
+                                  ]
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                              "version": "2.78.0"
+                            }
+                          },
+                          "ApiPermission.Test.SentistockCdkStackSentiStockApi5BC419F0.GET..gettopbyindex": {
+                            "id": "ApiPermission.Test.SentistockCdkStackSentiStockApi5BC419F0.GET..gettopbyindex",
+                            "path": "SentistockCdkStack/SentiStockApi/Default/gettopbyindex/GET/ApiPermission.Test.SentistockCdkStackSentiStockApi5BC419F0.GET..gettopbyindex",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                              "aws:cdk:cloudformation:props": {
+                                "action": "lambda:InvokeFunction",
+                                "functionName": {
+                                  "Fn::GetAtt": [
+                                    "getTopByIndex3013D48F",
+                                    "Arn"
+                                  ]
+                                },
+                                "principal": "apigateway.amazonaws.com",
+                                "sourceArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":execute-api:",
+                                      {
+                                        "Ref": "AWS::Region"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "SentiStockApi8AD84F5D"
+                                      },
+                                      "/test-invoke-stage/GET/gettopbyindex"
+                                    ]
+                                  ]
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                              "version": "2.78.0"
+                            }
+                          },
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "SentistockCdkStack/SentiStockApi/Default/gettopbyindex/GET/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
+                              "aws:cdk:cloudformation:props": {
+                                "httpMethod": "GET",
+                                "resourceId": {
+                                  "Ref": "SentiStockApigettopbyindex1B39A84C"
+                                },
+                                "restApiId": {
+                                  "Ref": "SentiStockApi8AD84F5D"
+                                },
+                                "authorizationType": "NONE",
+                                "integration": {
+                                  "type": "AWS_PROXY",
+                                  "uri": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:",
+                                        {
+                                          "Ref": "AWS::Partition"
+                                        },
+                                        ":apigateway:",
+                                        {
+                                          "Ref": "AWS::Region"
+                                        },
+                                        ":lambda:path/2015-03-31/functions/",
+                                        {
+                                          "Fn::GetAtt": [
+                                            "getTopByIndex3013D48F",
+                                            "Arn"
+                                          ]
+                                        },
+                                        "/invocations"
+                                      ]
+                                    ]
+                                  },
+                                  "integrationHttpMethod": "POST"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_apigateway.CfnMethod",
+                              "version": "2.78.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_apigateway.Method",
+                          "version": "2.78.0"
+                        }
+                      },
+                      "OPTIONS": {
+                        "id": "OPTIONS",
+                        "path": "SentistockCdkStack/SentiStockApi/Default/gettopbyindex/OPTIONS",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "SentistockCdkStack/SentiStockApi/Default/gettopbyindex/OPTIONS/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
+                              "aws:cdk:cloudformation:props": {
+                                "httpMethod": "OPTIONS",
+                                "resourceId": {
+                                  "Ref": "SentiStockApigettopbyindex1B39A84C"
+                                },
+                                "restApiId": {
+                                  "Ref": "SentiStockApi8AD84F5D"
+                                },
+                                "authorizationType": "NONE",
+                                "integration": {
+                                  "type": "MOCK",
+                                  "requestTemplates": {
+                                    "application/json": "{\"statusCode\": 200}"
+                                  },
+                                  "passthroughBehavior": "NEVER",
+                                  "integrationResponses": [
+                                    {
+                                      "statusCode": "200",
+                                      "responseParameters": {
+                                        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+                                        "method.response.header.Access-Control-Allow-Origin": "'*'",
+                                        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE'"
+                                      }
+                                    }
+                                  ]
+                                },
+                                "methodResponses": [
+                                  {
+                                    "statusCode": "200",
+                                    "responseParameters": {
+                                      "method.response.header.Access-Control-Allow-Headers": true,
+                                      "method.response.header.Access-Control-Allow-Methods": true,
+                                      "method.response.header.Access-Control-Allow-Origin": true
+                                    }
+                                  }
+                                ]
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_apigateway.CfnMethod",
+                              "version": "2.78.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_apigateway.Method",
+                          "version": "2.78.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_apigateway.Resource",
+                      "version": "2.78.0"
+                    }
+                  },
+                  "getsentiment": {
+                    "id": "getsentiment",
+                    "path": "SentistockCdkStack/SentiStockApi/Default/getsentiment",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "SentistockCdkStack/SentiStockApi/Default/getsentiment/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::ApiGateway::Resource",
+                          "aws:cdk:cloudformation:props": {
+                            "parentId": {
+                              "Fn::GetAtt": [
+                                "SentiStockApi8AD84F5D",
+                                "RootResourceId"
+                              ]
+                            },
+                            "pathPart": "getsentiment",
+                            "restApiId": {
+                              "Ref": "SentiStockApi8AD84F5D"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_apigateway.CfnResource",
+                          "version": "2.78.0"
+                        }
+                      },
+                      "POST": {
+                        "id": "POST",
+                        "path": "SentistockCdkStack/SentiStockApi/Default/getsentiment/POST",
+                        "children": {
+                          "ApiPermission.SentistockCdkStackSentiStockApi5BC419F0.POST..getsentiment": {
+                            "id": "ApiPermission.SentistockCdkStackSentiStockApi5BC419F0.POST..getsentiment",
+                            "path": "SentistockCdkStack/SentiStockApi/Default/getsentiment/POST/ApiPermission.SentistockCdkStackSentiStockApi5BC419F0.POST..getsentiment",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                              "aws:cdk:cloudformation:props": {
+                                "action": "lambda:InvokeFunction",
+                                "functionName": {
+                                  "Fn::GetAtt": [
+                                    "sentimentAnalysisDA099C55",
+                                    "Arn"
+                                  ]
+                                },
+                                "principal": "apigateway.amazonaws.com",
+                                "sourceArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":execute-api:",
+                                      {
+                                        "Ref": "AWS::Region"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "SentiStockApi8AD84F5D"
+                                      },
+                                      "/",
+                                      {
+                                        "Ref": "SentiStockApiDeploymentStageprodA9F35B99"
+                                      },
+                                      "/POST/getsentiment"
+                                    ]
+                                  ]
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                              "version": "2.78.0"
+                            }
+                          },
+                          "ApiPermission.Test.SentistockCdkStackSentiStockApi5BC419F0.POST..getsentiment": {
+                            "id": "ApiPermission.Test.SentistockCdkStackSentiStockApi5BC419F0.POST..getsentiment",
+                            "path": "SentistockCdkStack/SentiStockApi/Default/getsentiment/POST/ApiPermission.Test.SentistockCdkStackSentiStockApi5BC419F0.POST..getsentiment",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                              "aws:cdk:cloudformation:props": {
+                                "action": "lambda:InvokeFunction",
+                                "functionName": {
+                                  "Fn::GetAtt": [
+                                    "sentimentAnalysisDA099C55",
+                                    "Arn"
+                                  ]
+                                },
+                                "principal": "apigateway.amazonaws.com",
+                                "sourceArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":execute-api:",
+                                      {
+                                        "Ref": "AWS::Region"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "SentiStockApi8AD84F5D"
+                                      },
+                                      "/test-invoke-stage/POST/getsentiment"
+                                    ]
+                                  ]
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                              "version": "2.78.0"
+                            }
+                          },
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "SentistockCdkStack/SentiStockApi/Default/getsentiment/POST/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
+                              "aws:cdk:cloudformation:props": {
+                                "httpMethod": "POST",
+                                "resourceId": {
+                                  "Ref": "SentiStockApigetsentimentBDB62F09"
+                                },
+                                "restApiId": {
+                                  "Ref": "SentiStockApi8AD84F5D"
+                                },
+                                "authorizationType": "NONE",
+                                "integration": {
+                                  "type": "AWS_PROXY",
+                                  "uri": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:",
+                                        {
+                                          "Ref": "AWS::Partition"
+                                        },
+                                        ":apigateway:",
+                                        {
+                                          "Ref": "AWS::Region"
+                                        },
+                                        ":lambda:path/2015-03-31/functions/",
+                                        {
+                                          "Fn::GetAtt": [
+                                            "sentimentAnalysisDA099C55",
+                                            "Arn"
+                                          ]
+                                        },
+                                        "/invocations"
+                                      ]
+                                    ]
+                                  },
+                                  "integrationHttpMethod": "POST"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_apigateway.CfnMethod",
+                              "version": "2.78.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_apigateway.Method",
+                          "version": "2.78.0"
+                        }
+                      },
+                      "OPTIONS": {
+                        "id": "OPTIONS",
+                        "path": "SentistockCdkStack/SentiStockApi/Default/getsentiment/OPTIONS",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "SentistockCdkStack/SentiStockApi/Default/getsentiment/OPTIONS/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
+                              "aws:cdk:cloudformation:props": {
+                                "httpMethod": "OPTIONS",
+                                "resourceId": {
+                                  "Ref": "SentiStockApigetsentimentBDB62F09"
+                                },
+                                "restApiId": {
+                                  "Ref": "SentiStockApi8AD84F5D"
+                                },
+                                "authorizationType": "NONE",
+                                "integration": {
+                                  "type": "MOCK",
+                                  "requestTemplates": {
+                                    "application/json": "{\"statusCode\": 200}"
+                                  },
+                                  "passthroughBehavior": "NEVER",
+                                  "integrationResponses": [
+                                    {
+                                      "statusCode": "200",
+                                      "responseParameters": {
+                                        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+                                        "method.response.header.Access-Control-Allow-Origin": "'*'",
+                                        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE'"
+                                      }
+                                    }
+                                  ]
+                                },
+                                "methodResponses": [
+                                  {
+                                    "statusCode": "200",
+                                    "responseParameters": {
+                                      "method.response.header.Access-Control-Allow-Headers": true,
+                                      "method.response.header.Access-Control-Allow-Methods": true,
+                                      "method.response.header.Access-Control-Allow-Origin": true
+                                    }
+                                  }
+                                ]
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_apigateway.CfnMethod",
+                              "version": "2.78.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_apigateway.Method",
+                          "version": "2.78.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_apigateway.Resource",
+                      "version": "2.78.0"
+                    }
+                  },
+                  "getuserstocks": {
+                    "id": "getuserstocks",
+                    "path": "SentistockCdkStack/SentiStockApi/Default/getuserstocks",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "SentistockCdkStack/SentiStockApi/Default/getuserstocks/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::ApiGateway::Resource",
+                          "aws:cdk:cloudformation:props": {
+                            "parentId": {
+                              "Fn::GetAtt": [
+                                "SentiStockApi8AD84F5D",
+                                "RootResourceId"
+                              ]
+                            },
+                            "pathPart": "getuserstocks",
+                            "restApiId": {
+                              "Ref": "SentiStockApi8AD84F5D"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_apigateway.CfnResource",
+                          "version": "2.78.0"
+                        }
+                      },
+                      "GET": {
+                        "id": "GET",
+                        "path": "SentistockCdkStack/SentiStockApi/Default/getuserstocks/GET",
+                        "children": {
+                          "ApiPermission.SentistockCdkStackSentiStockApi5BC419F0.GET..getuserstocks": {
+                            "id": "ApiPermission.SentistockCdkStackSentiStockApi5BC419F0.GET..getuserstocks",
+                            "path": "SentistockCdkStack/SentiStockApi/Default/getuserstocks/GET/ApiPermission.SentistockCdkStackSentiStockApi5BC419F0.GET..getuserstocks",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                              "aws:cdk:cloudformation:props": {
+                                "action": "lambda:InvokeFunction",
+                                "functionName": {
+                                  "Fn::GetAtt": [
+                                    "getUserStocks06AC50CB",
+                                    "Arn"
+                                  ]
+                                },
+                                "principal": "apigateway.amazonaws.com",
+                                "sourceArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":execute-api:",
+                                      {
+                                        "Ref": "AWS::Region"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "SentiStockApi8AD84F5D"
+                                      },
+                                      "/",
+                                      {
+                                        "Ref": "SentiStockApiDeploymentStageprodA9F35B99"
+                                      },
+                                      "/GET/getuserstocks"
+                                    ]
+                                  ]
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                              "version": "2.78.0"
+                            }
+                          },
+                          "ApiPermission.Test.SentistockCdkStackSentiStockApi5BC419F0.GET..getuserstocks": {
+                            "id": "ApiPermission.Test.SentistockCdkStackSentiStockApi5BC419F0.GET..getuserstocks",
+                            "path": "SentistockCdkStack/SentiStockApi/Default/getuserstocks/GET/ApiPermission.Test.SentistockCdkStackSentiStockApi5BC419F0.GET..getuserstocks",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                              "aws:cdk:cloudformation:props": {
+                                "action": "lambda:InvokeFunction",
+                                "functionName": {
+                                  "Fn::GetAtt": [
+                                    "getUserStocks06AC50CB",
+                                    "Arn"
+                                  ]
+                                },
+                                "principal": "apigateway.amazonaws.com",
+                                "sourceArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":execute-api:",
+                                      {
+                                        "Ref": "AWS::Region"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "SentiStockApi8AD84F5D"
+                                      },
+                                      "/test-invoke-stage/GET/getuserstocks"
+                                    ]
+                                  ]
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                              "version": "2.78.0"
+                            }
+                          },
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "SentistockCdkStack/SentiStockApi/Default/getuserstocks/GET/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
+                              "aws:cdk:cloudformation:props": {
+                                "httpMethod": "GET",
+                                "resourceId": {
+                                  "Ref": "SentiStockApigetuserstocks0C3F8EDA"
+                                },
+                                "restApiId": {
+                                  "Ref": "SentiStockApi8AD84F5D"
+                                },
+                                "authorizationType": "NONE",
+                                "integration": {
+                                  "type": "AWS_PROXY",
+                                  "uri": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:",
+                                        {
+                                          "Ref": "AWS::Partition"
+                                        },
+                                        ":apigateway:",
+                                        {
+                                          "Ref": "AWS::Region"
+                                        },
+                                        ":lambda:path/2015-03-31/functions/",
+                                        {
+                                          "Fn::GetAtt": [
+                                            "getUserStocks06AC50CB",
+                                            "Arn"
+                                          ]
+                                        },
+                                        "/invocations"
+                                      ]
+                                    ]
+                                  },
+                                  "integrationHttpMethod": "POST"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_apigateway.CfnMethod",
+                              "version": "2.78.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_apigateway.Method",
+                          "version": "2.78.0"
+                        }
+                      },
+                      "OPTIONS": {
+                        "id": "OPTIONS",
+                        "path": "SentistockCdkStack/SentiStockApi/Default/getuserstocks/OPTIONS",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "SentistockCdkStack/SentiStockApi/Default/getuserstocks/OPTIONS/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
+                              "aws:cdk:cloudformation:props": {
+                                "httpMethod": "OPTIONS",
+                                "resourceId": {
+                                  "Ref": "SentiStockApigetuserstocks0C3F8EDA"
+                                },
+                                "restApiId": {
+                                  "Ref": "SentiStockApi8AD84F5D"
+                                },
+                                "authorizationType": "NONE",
+                                "integration": {
+                                  "type": "MOCK",
+                                  "requestTemplates": {
+                                    "application/json": "{\"statusCode\": 200}"
+                                  },
+                                  "passthroughBehavior": "NEVER",
+                                  "integrationResponses": [
+                                    {
+                                      "statusCode": "200",
+                                      "responseParameters": {
+                                        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+                                        "method.response.header.Access-Control-Allow-Origin": "'*'",
+                                        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE'"
+                                      }
+                                    }
+                                  ]
+                                },
+                                "methodResponses": [
+                                  {
+                                    "statusCode": "200",
+                                    "responseParameters": {
+                                      "method.response.header.Access-Control-Allow-Headers": true,
+                                      "method.response.header.Access-Control-Allow-Methods": true,
+                                      "method.response.header.Access-Control-Allow-Origin": true
+                                    }
+                                  }
+                                ]
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_apigateway.CfnMethod",
+                              "version": "2.78.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_apigateway.Method",
+                          "version": "2.78.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_apigateway.Resource",
+                      "version": "2.78.0"
+                    }
+                  },
+                  "removeuserstock": {
+                    "id": "removeuserstock",
+                    "path": "SentistockCdkStack/SentiStockApi/Default/removeuserstock",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "SentistockCdkStack/SentiStockApi/Default/removeuserstock/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::ApiGateway::Resource",
+                          "aws:cdk:cloudformation:props": {
+                            "parentId": {
+                              "Fn::GetAtt": [
+                                "SentiStockApi8AD84F5D",
+                                "RootResourceId"
+                              ]
+                            },
+                            "pathPart": "removeuserstock",
+                            "restApiId": {
+                              "Ref": "SentiStockApi8AD84F5D"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_apigateway.CfnResource",
+                          "version": "2.78.0"
+                        }
+                      },
+                      "POST": {
+                        "id": "POST",
+                        "path": "SentistockCdkStack/SentiStockApi/Default/removeuserstock/POST",
+                        "children": {
+                          "ApiPermission.SentistockCdkStackSentiStockApi5BC419F0.POST..removeuserstock": {
+                            "id": "ApiPermission.SentistockCdkStackSentiStockApi5BC419F0.POST..removeuserstock",
+                            "path": "SentistockCdkStack/SentiStockApi/Default/removeuserstock/POST/ApiPermission.SentistockCdkStackSentiStockApi5BC419F0.POST..removeuserstock",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                              "aws:cdk:cloudformation:props": {
+                                "action": "lambda:InvokeFunction",
+                                "functionName": {
+                                  "Fn::GetAtt": [
+                                    "removeUserStock836A34F9",
+                                    "Arn"
+                                  ]
+                                },
+                                "principal": "apigateway.amazonaws.com",
+                                "sourceArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":execute-api:",
+                                      {
+                                        "Ref": "AWS::Region"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "SentiStockApi8AD84F5D"
+                                      },
+                                      "/",
+                                      {
+                                        "Ref": "SentiStockApiDeploymentStageprodA9F35B99"
+                                      },
+                                      "/POST/removeuserstock"
+                                    ]
+                                  ]
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                              "version": "2.78.0"
+                            }
+                          },
+                          "ApiPermission.Test.SentistockCdkStackSentiStockApi5BC419F0.POST..removeuserstock": {
+                            "id": "ApiPermission.Test.SentistockCdkStackSentiStockApi5BC419F0.POST..removeuserstock",
+                            "path": "SentistockCdkStack/SentiStockApi/Default/removeuserstock/POST/ApiPermission.Test.SentistockCdkStackSentiStockApi5BC419F0.POST..removeuserstock",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                              "aws:cdk:cloudformation:props": {
+                                "action": "lambda:InvokeFunction",
+                                "functionName": {
+                                  "Fn::GetAtt": [
+                                    "removeUserStock836A34F9",
+                                    "Arn"
+                                  ]
+                                },
+                                "principal": "apigateway.amazonaws.com",
+                                "sourceArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":execute-api:",
+                                      {
+                                        "Ref": "AWS::Region"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "SentiStockApi8AD84F5D"
+                                      },
+                                      "/test-invoke-stage/POST/removeuserstock"
+                                    ]
+                                  ]
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                              "version": "2.78.0"
+                            }
+                          },
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "SentistockCdkStack/SentiStockApi/Default/removeuserstock/POST/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
+                              "aws:cdk:cloudformation:props": {
+                                "httpMethod": "POST",
+                                "resourceId": {
+                                  "Ref": "SentiStockApiremoveuserstock34B1F757"
+                                },
+                                "restApiId": {
+                                  "Ref": "SentiStockApi8AD84F5D"
+                                },
+                                "authorizationType": "NONE",
+                                "integration": {
+                                  "type": "AWS_PROXY",
+                                  "uri": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:",
+                                        {
+                                          "Ref": "AWS::Partition"
+                                        },
+                                        ":apigateway:",
+                                        {
+                                          "Ref": "AWS::Region"
+                                        },
+                                        ":lambda:path/2015-03-31/functions/",
+                                        {
+                                          "Fn::GetAtt": [
+                                            "removeUserStock836A34F9",
+                                            "Arn"
+                                          ]
+                                        },
+                                        "/invocations"
+                                      ]
+                                    ]
+                                  },
+                                  "integrationHttpMethod": "POST"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_apigateway.CfnMethod",
+                              "version": "2.78.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_apigateway.Method",
+                          "version": "2.78.0"
+                        }
+                      },
+                      "OPTIONS": {
+                        "id": "OPTIONS",
+                        "path": "SentistockCdkStack/SentiStockApi/Default/removeuserstock/OPTIONS",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "SentistockCdkStack/SentiStockApi/Default/removeuserstock/OPTIONS/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
+                              "aws:cdk:cloudformation:props": {
+                                "httpMethod": "OPTIONS",
+                                "resourceId": {
+                                  "Ref": "SentiStockApiremoveuserstock34B1F757"
+                                },
+                                "restApiId": {
+                                  "Ref": "SentiStockApi8AD84F5D"
+                                },
+                                "authorizationType": "NONE",
+                                "integration": {
+                                  "type": "MOCK",
+                                  "requestTemplates": {
+                                    "application/json": "{\"statusCode\": 200}"
+                                  },
+                                  "passthroughBehavior": "NEVER",
+                                  "integrationResponses": [
+                                    {
+                                      "statusCode": "200",
+                                      "responseParameters": {
+                                        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+                                        "method.response.header.Access-Control-Allow-Origin": "'*'",
+                                        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE'"
+                                      }
+                                    }
+                                  ]
+                                },
+                                "methodResponses": [
+                                  {
+                                    "statusCode": "200",
+                                    "responseParameters": {
+                                      "method.response.header.Access-Control-Allow-Headers": true,
+                                      "method.response.header.Access-Control-Allow-Methods": true,
+                                      "method.response.header.Access-Control-Allow-Origin": true
+                                    }
+                                  }
+                                ]
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_apigateway.CfnMethod",
+                              "version": "2.78.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_apigateway.Method",
+                          "version": "2.78.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_apigateway.Resource",
+                      "version": "2.78.0"
+                    }
+                  },
+                  "gettopstocks": {
+                    "id": "gettopstocks",
+                    "path": "SentistockCdkStack/SentiStockApi/Default/gettopstocks",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "SentistockCdkStack/SentiStockApi/Default/gettopstocks/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::ApiGateway::Resource",
+                          "aws:cdk:cloudformation:props": {
+                            "parentId": {
+                              "Fn::GetAtt": [
+                                "SentiStockApi8AD84F5D",
+                                "RootResourceId"
+                              ]
+                            },
+                            "pathPart": "gettopstocks",
+                            "restApiId": {
+                              "Ref": "SentiStockApi8AD84F5D"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_apigateway.CfnResource",
+                          "version": "2.78.0"
+                        }
+                      },
+                      "GET": {
+                        "id": "GET",
+                        "path": "SentistockCdkStack/SentiStockApi/Default/gettopstocks/GET",
+                        "children": {
+                          "ApiPermission.SentistockCdkStackSentiStockApi5BC419F0.GET..gettopstocks": {
+                            "id": "ApiPermission.SentistockCdkStackSentiStockApi5BC419F0.GET..gettopstocks",
+                            "path": "SentistockCdkStack/SentiStockApi/Default/gettopstocks/GET/ApiPermission.SentistockCdkStackSentiStockApi5BC419F0.GET..gettopstocks",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                              "aws:cdk:cloudformation:props": {
+                                "action": "lambda:InvokeFunction",
+                                "functionName": {
+                                  "Fn::GetAtt": [
+                                    "getTopStocksA7101D29",
+                                    "Arn"
+                                  ]
+                                },
+                                "principal": "apigateway.amazonaws.com",
+                                "sourceArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":execute-api:",
+                                      {
+                                        "Ref": "AWS::Region"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "SentiStockApi8AD84F5D"
+                                      },
+                                      "/",
+                                      {
+                                        "Ref": "SentiStockApiDeploymentStageprodA9F35B99"
+                                      },
+                                      "/GET/gettopstocks"
+                                    ]
+                                  ]
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                              "version": "2.78.0"
+                            }
+                          },
+                          "ApiPermission.Test.SentistockCdkStackSentiStockApi5BC419F0.GET..gettopstocks": {
+                            "id": "ApiPermission.Test.SentistockCdkStackSentiStockApi5BC419F0.GET..gettopstocks",
+                            "path": "SentistockCdkStack/SentiStockApi/Default/gettopstocks/GET/ApiPermission.Test.SentistockCdkStackSentiStockApi5BC419F0.GET..gettopstocks",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                              "aws:cdk:cloudformation:props": {
+                                "action": "lambda:InvokeFunction",
+                                "functionName": {
+                                  "Fn::GetAtt": [
+                                    "getTopStocksA7101D29",
+                                    "Arn"
+                                  ]
+                                },
+                                "principal": "apigateway.amazonaws.com",
+                                "sourceArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":execute-api:",
+                                      {
+                                        "Ref": "AWS::Region"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "SentiStockApi8AD84F5D"
+                                      },
+                                      "/test-invoke-stage/GET/gettopstocks"
+                                    ]
+                                  ]
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                              "version": "2.78.0"
+                            }
+                          },
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "SentistockCdkStack/SentiStockApi/Default/gettopstocks/GET/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
+                              "aws:cdk:cloudformation:props": {
+                                "httpMethod": "GET",
+                                "resourceId": {
+                                  "Ref": "SentiStockApigettopstocks150E7A81"
+                                },
+                                "restApiId": {
+                                  "Ref": "SentiStockApi8AD84F5D"
+                                },
+                                "authorizationType": "NONE",
+                                "integration": {
+                                  "type": "AWS_PROXY",
+                                  "uri": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:",
+                                        {
+                                          "Ref": "AWS::Partition"
+                                        },
+                                        ":apigateway:",
+                                        {
+                                          "Ref": "AWS::Region"
+                                        },
+                                        ":lambda:path/2015-03-31/functions/",
+                                        {
+                                          "Fn::GetAtt": [
+                                            "getTopStocksA7101D29",
+                                            "Arn"
+                                          ]
+                                        },
+                                        "/invocations"
+                                      ]
+                                    ]
+                                  },
+                                  "integrationHttpMethod": "POST"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_apigateway.CfnMethod",
+                              "version": "2.78.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_apigateway.Method",
+                          "version": "2.78.0"
+                        }
+                      },
+                      "OPTIONS": {
+                        "id": "OPTIONS",
+                        "path": "SentistockCdkStack/SentiStockApi/Default/gettopstocks/OPTIONS",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "SentistockCdkStack/SentiStockApi/Default/gettopstocks/OPTIONS/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
+                              "aws:cdk:cloudformation:props": {
+                                "httpMethod": "OPTIONS",
+                                "resourceId": {
+                                  "Ref": "SentiStockApigettopstocks150E7A81"
+                                },
+                                "restApiId": {
+                                  "Ref": "SentiStockApi8AD84F5D"
+                                },
+                                "authorizationType": "NONE",
+                                "integration": {
+                                  "type": "MOCK",
+                                  "requestTemplates": {
+                                    "application/json": "{\"statusCode\": 200}"
+                                  },
+                                  "passthroughBehavior": "NEVER",
+                                  "integrationResponses": [
+                                    {
+                                      "statusCode": "200",
+                                      "responseParameters": {
+                                        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+                                        "method.response.header.Access-Control-Allow-Origin": "'*'",
+                                        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE'"
+                                      }
+                                    }
+                                  ]
+                                },
+                                "methodResponses": [
+                                  {
+                                    "statusCode": "200",
+                                    "responseParameters": {
+                                      "method.response.header.Access-Control-Allow-Headers": true,
+                                      "method.response.header.Access-Control-Allow-Methods": true,
+                                      "method.response.header.Access-Control-Allow-Origin": true
+                                    }
+                                  }
+                                ]
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_apigateway.CfnMethod",
+                              "version": "2.78.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_apigateway.Method",
+                          "version": "2.78.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_apigateway.Resource",
+                      "version": "2.78.0"
+                    }
+                  },
+                  "updatetopbyindex": {
+                    "id": "updatetopbyindex",
+                    "path": "SentistockCdkStack/SentiStockApi/Default/updatetopbyindex",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "SentistockCdkStack/SentiStockApi/Default/updatetopbyindex/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::ApiGateway::Resource",
+                          "aws:cdk:cloudformation:props": {
+                            "parentId": {
+                              "Fn::GetAtt": [
+                                "SentiStockApi8AD84F5D",
+                                "RootResourceId"
+                              ]
+                            },
+                            "pathPart": "updatetopbyindex",
+                            "restApiId": {
+                              "Ref": "SentiStockApi8AD84F5D"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_apigateway.CfnResource",
+                          "version": "2.78.0"
+                        }
+                      },
+                      "POST": {
+                        "id": "POST",
+                        "path": "SentistockCdkStack/SentiStockApi/Default/updatetopbyindex/POST",
+                        "children": {
+                          "ApiPermission.SentistockCdkStackSentiStockApi5BC419F0.POST..updatetopbyindex": {
+                            "id": "ApiPermission.SentistockCdkStackSentiStockApi5BC419F0.POST..updatetopbyindex",
+                            "path": "SentistockCdkStack/SentiStockApi/Default/updatetopbyindex/POST/ApiPermission.SentistockCdkStackSentiStockApi5BC419F0.POST..updatetopbyindex",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                              "aws:cdk:cloudformation:props": {
+                                "action": "lambda:InvokeFunction",
+                                "functionName": {
+                                  "Fn::GetAtt": [
+                                    "updateTopByIndexE36F3F04",
+                                    "Arn"
+                                  ]
+                                },
+                                "principal": "apigateway.amazonaws.com",
+                                "sourceArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":execute-api:",
+                                      {
+                                        "Ref": "AWS::Region"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "SentiStockApi8AD84F5D"
+                                      },
+                                      "/",
+                                      {
+                                        "Ref": "SentiStockApiDeploymentStageprodA9F35B99"
+                                      },
+                                      "/POST/updatetopbyindex"
+                                    ]
+                                  ]
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                              "version": "2.78.0"
+                            }
+                          },
+                          "ApiPermission.Test.SentistockCdkStackSentiStockApi5BC419F0.POST..updatetopbyindex": {
+                            "id": "ApiPermission.Test.SentistockCdkStackSentiStockApi5BC419F0.POST..updatetopbyindex",
+                            "path": "SentistockCdkStack/SentiStockApi/Default/updatetopbyindex/POST/ApiPermission.Test.SentistockCdkStackSentiStockApi5BC419F0.POST..updatetopbyindex",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                              "aws:cdk:cloudformation:props": {
+                                "action": "lambda:InvokeFunction",
+                                "functionName": {
+                                  "Fn::GetAtt": [
+                                    "updateTopByIndexE36F3F04",
+                                    "Arn"
+                                  ]
+                                },
+                                "principal": "apigateway.amazonaws.com",
+                                "sourceArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":execute-api:",
+                                      {
+                                        "Ref": "AWS::Region"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "SentiStockApi8AD84F5D"
+                                      },
+                                      "/test-invoke-stage/POST/updatetopbyindex"
+                                    ]
+                                  ]
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                              "version": "2.78.0"
+                            }
+                          },
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "SentistockCdkStack/SentiStockApi/Default/updatetopbyindex/POST/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
+                              "aws:cdk:cloudformation:props": {
+                                "httpMethod": "POST",
+                                "resourceId": {
+                                  "Ref": "SentiStockApiupdatetopbyindex930F1E78"
+                                },
+                                "restApiId": {
+                                  "Ref": "SentiStockApi8AD84F5D"
+                                },
+                                "authorizationType": "NONE",
+                                "integration": {
+                                  "type": "AWS_PROXY",
+                                  "uri": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:",
+                                        {
+                                          "Ref": "AWS::Partition"
+                                        },
+                                        ":apigateway:",
+                                        {
+                                          "Ref": "AWS::Region"
+                                        },
+                                        ":lambda:path/2015-03-31/functions/",
+                                        {
+                                          "Fn::GetAtt": [
+                                            "updateTopByIndexE36F3F04",
+                                            "Arn"
+                                          ]
+                                        },
+                                        "/invocations"
+                                      ]
+                                    ]
+                                  },
+                                  "integrationHttpMethod": "POST"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_apigateway.CfnMethod",
+                              "version": "2.78.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_apigateway.Method",
+                          "version": "2.78.0"
+                        }
+                      },
+                      "OPTIONS": {
+                        "id": "OPTIONS",
+                        "path": "SentistockCdkStack/SentiStockApi/Default/updatetopbyindex/OPTIONS",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "SentistockCdkStack/SentiStockApi/Default/updatetopbyindex/OPTIONS/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
+                              "aws:cdk:cloudformation:props": {
+                                "httpMethod": "OPTIONS",
+                                "resourceId": {
+                                  "Ref": "SentiStockApiupdatetopbyindex930F1E78"
+                                },
+                                "restApiId": {
+                                  "Ref": "SentiStockApi8AD84F5D"
+                                },
+                                "authorizationType": "NONE",
+                                "integration": {
+                                  "type": "MOCK",
+                                  "requestTemplates": {
+                                    "application/json": "{\"statusCode\": 200}"
+                                  },
+                                  "passthroughBehavior": "NEVER",
+                                  "integrationResponses": [
+                                    {
+                                      "statusCode": "200",
+                                      "responseParameters": {
+                                        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+                                        "method.response.header.Access-Control-Allow-Origin": "'*'",
+                                        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE'"
+                                      }
+                                    }
+                                  ]
+                                },
+                                "methodResponses": [
+                                  {
+                                    "statusCode": "200",
+                                    "responseParameters": {
+                                      "method.response.header.Access-Control-Allow-Headers": true,
+                                      "method.response.header.Access-Control-Allow-Methods": true,
+                                      "method.response.header.Access-Control-Allow-Origin": true
+                                    }
+                                  }
+                                ]
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_apigateway.CfnMethod",
+                              "version": "2.78.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_apigateway.Method",
+                          "version": "2.78.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_apigateway.Resource",
+                      "version": "2.78.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_apigateway.ResourceBase",
+                  "version": "2.78.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_apigateway.RestApi",
+              "version": "2.78.0"
+            }
+          },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "SentistockCdkStack/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "SentistockCdkStack/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.78.0"
+                }
+              },
+              "Condition": {
+                "id": "Condition",
+                "path": "SentistockCdkStack/CDKMetadata/Condition",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnCondition",
+                  "version": "2.78.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.2.17"
+            }
+          },
+          "BootstrapVersion": {
+            "id": "BootstrapVersion",
+            "path": "SentistockCdkStack/BootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.78.0"
+            }
+          },
+          "CheckBootstrapVersion": {
+            "id": "CheckBootstrapVersion",
+            "path": "SentistockCdkStack/CheckBootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnRule",
+              "version": "2.78.0"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "aws-cdk-lib.Stack",
+          "version": "2.78.0"
+        }
+      },
+      "Tree": {
+        "id": "Tree",
+        "path": "Tree",
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.2.17"
+        }
+      }
+    },
+    "constructInfo": {
+      "fqn": "aws-cdk-lib.App",
+      "version": "2.78.0"
+    }
+  }
+}

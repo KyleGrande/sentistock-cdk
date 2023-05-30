@@ -1,0 +1,512 @@
+{
+  "version": "31.0.0",
+  "artifacts": {
+    "SentistockCdkStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "SentistockCdkStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "SentistockCdkStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/unknown-region",
+      "properties": {
+        "templateFile": "SentistockCdkStack.template.json",
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/e5bbf80df2c09149b64626204926955549ef27292d1778a78cebb69a05e2fb28.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "SentistockCdkStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-${AWS::Region}",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "SentistockCdkStack.assets"
+      ],
+      "metadata": {
+        "/SentistockCdkStack/MyUserPool/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MyUserPoolD09D1D74"
+          }
+        ],
+        "/SentistockCdkStack/MyUserPoolClient/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MyUserPoolClient4DB3315D"
+          }
+        ],
+        "/SentistockCdkStack/StockQuotes": [
+          {
+            "type": "aws:cdk:hasPhysicalName",
+            "data": {
+              "Ref": "StockQuotesFD804EA5"
+            }
+          }
+        ],
+        "/SentistockCdkStack/StockQuotes/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StockQuotesFD804EA5"
+          }
+        ],
+        "/SentistockCdkStack/UserStocks": [
+          {
+            "type": "aws:cdk:hasPhysicalName",
+            "data": {
+              "Ref": "UserStocks6B32108E"
+            }
+          }
+        ],
+        "/SentistockCdkStack/UserStocks/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "UserStocks6B32108E"
+          }
+        ],
+        "/SentistockCdkStack/getStock/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "getStockServiceRole23DD3B81"
+          }
+        ],
+        "/SentistockCdkStack/getStock/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "getStock9F21ADF5"
+          }
+        ],
+        "/SentistockCdkStack/addUserStocks/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "addUserStocksServiceRoleFBA634AE"
+          }
+        ],
+        "/SentistockCdkStack/addUserStocks/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "addUserStocks7C738883"
+          }
+        ],
+        "/SentistockCdkStack/targetSentimentAnalysis/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "targetSentimentAnalysisServiceRole5B556A7D"
+          }
+        ],
+        "/SentistockCdkStack/targetSentimentAnalysis/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "targetSentimentAnalysis9547ED33"
+          }
+        ],
+        "/SentistockCdkStack/getTopByIndex/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "getTopByIndexServiceRoleE087942D"
+          }
+        ],
+        "/SentistockCdkStack/getTopByIndex/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "getTopByIndex3013D48F"
+          }
+        ],
+        "/SentistockCdkStack/sentimentAnalysis/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "sentimentAnalysisServiceRoleFAF72CC2"
+          }
+        ],
+        "/SentistockCdkStack/sentimentAnalysis/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "sentimentAnalysisDA099C55"
+          }
+        ],
+        "/SentistockCdkStack/getUserStocks/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "getUserStocksServiceRoleEECCF8BB"
+          }
+        ],
+        "/SentistockCdkStack/getUserStocks/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "getUserStocks06AC50CB"
+          }
+        ],
+        "/SentistockCdkStack/removeUserStock/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "removeUserStockServiceRole2A9E694B"
+          }
+        ],
+        "/SentistockCdkStack/removeUserStock/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "removeUserStock836A34F9"
+          }
+        ],
+        "/SentistockCdkStack/getTopStocks/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "getTopStocksServiceRoleE285CF17"
+          }
+        ],
+        "/SentistockCdkStack/getTopStocks/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "getTopStocksA7101D29"
+          }
+        ],
+        "/SentistockCdkStack/updateTopByIndex/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "updateTopByIndexServiceRole10ED5DB2"
+          }
+        ],
+        "/SentistockCdkStack/updateTopByIndex/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "updateTopByIndexE36F3F04"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApi8AD84F5D"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Deployment/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApiDeploymentBDEDEC09385fd7546b7b510900d42f1c93e960f6"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/DeploymentStage.prod/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApiDeploymentStageprodA9F35B99"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Endpoint": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApiEndpoint718A5BAE"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Default/getstock/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApigetstock08BC4F93"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Default/getstock/GET/ApiPermission.SentistockCdkStackSentiStockApi5BC419F0.GET..getstock": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApigetstockGETApiPermissionSentistockCdkStackSentiStockApi5BC419F0GETgetstockA23FF899"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Default/getstock/GET/ApiPermission.Test.SentistockCdkStackSentiStockApi5BC419F0.GET..getstock": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApigetstockGETApiPermissionTestSentistockCdkStackSentiStockApi5BC419F0GETgetstockFA72D460"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Default/getstock/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApigetstockGET83A582F5"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Default/getstock/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApigetstockOPTIONSD010E413"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Default/adduserstock/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApiadduserstockD1ED9BB6"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Default/adduserstock/POST/ApiPermission.SentistockCdkStackSentiStockApi5BC419F0.POST..adduserstock": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApiadduserstockPOSTApiPermissionSentistockCdkStackSentiStockApi5BC419F0POSTadduserstockC9746A17"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Default/adduserstock/POST/ApiPermission.Test.SentistockCdkStackSentiStockApi5BC419F0.POST..adduserstock": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApiadduserstockPOSTApiPermissionTestSentistockCdkStackSentiStockApi5BC419F0POSTadduserstock9253EA20"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Default/adduserstock/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApiadduserstockPOST01A4C521"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Default/adduserstock/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApiadduserstockOPTIONS0D065AB4"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Default/gettargetsentiment/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApigettargetsentimentBA9BE9B8"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Default/gettargetsentiment/POST/ApiPermission.SentistockCdkStackSentiStockApi5BC419F0.POST..gettargetsentiment": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApigettargetsentimentPOSTApiPermissionSentistockCdkStackSentiStockApi5BC419F0POSTgettargetsentiment9E5D00B9"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Default/gettargetsentiment/POST/ApiPermission.Test.SentistockCdkStackSentiStockApi5BC419F0.POST..gettargetsentiment": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApigettargetsentimentPOSTApiPermissionTestSentistockCdkStackSentiStockApi5BC419F0POSTgettargetsentimentD0680122"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Default/gettargetsentiment/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApigettargetsentimentPOST2F6D9DA8"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Default/gettargetsentiment/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApigettargetsentimentOPTIONS20C7C7D0"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Default/gettopbyindex/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApigettopbyindex1B39A84C"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Default/gettopbyindex/GET/ApiPermission.SentistockCdkStackSentiStockApi5BC419F0.GET..gettopbyindex": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApigettopbyindexGETApiPermissionSentistockCdkStackSentiStockApi5BC419F0GETgettopbyindex02B89245"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Default/gettopbyindex/GET/ApiPermission.Test.SentistockCdkStackSentiStockApi5BC419F0.GET..gettopbyindex": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApigettopbyindexGETApiPermissionTestSentistockCdkStackSentiStockApi5BC419F0GETgettopbyindexBEA12AEB"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Default/gettopbyindex/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApigettopbyindexGETAFDE21D1"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Default/gettopbyindex/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApigettopbyindexOPTIONSE3092A47"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Default/getsentiment/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApigetsentimentBDB62F09"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Default/getsentiment/POST/ApiPermission.SentistockCdkStackSentiStockApi5BC419F0.POST..getsentiment": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApigetsentimentPOSTApiPermissionSentistockCdkStackSentiStockApi5BC419F0POSTgetsentiment1101648B"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Default/getsentiment/POST/ApiPermission.Test.SentistockCdkStackSentiStockApi5BC419F0.POST..getsentiment": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApigetsentimentPOSTApiPermissionTestSentistockCdkStackSentiStockApi5BC419F0POSTgetsentiment662BC250"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Default/getsentiment/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApigetsentimentPOSTD5B3EB30"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Default/getsentiment/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApigetsentimentOPTIONSBCFE7E09"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Default/getuserstocks/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApigetuserstocks0C3F8EDA"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Default/getuserstocks/GET/ApiPermission.SentistockCdkStackSentiStockApi5BC419F0.GET..getuserstocks": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApigetuserstocksGETApiPermissionSentistockCdkStackSentiStockApi5BC419F0GETgetuserstocksB60EBF12"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Default/getuserstocks/GET/ApiPermission.Test.SentistockCdkStackSentiStockApi5BC419F0.GET..getuserstocks": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApigetuserstocksGETApiPermissionTestSentistockCdkStackSentiStockApi5BC419F0GETgetuserstocksD0AACAD8"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Default/getuserstocks/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApigetuserstocksGET8F9CE412"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Default/getuserstocks/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApigetuserstocksOPTIONS81CA36E8"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Default/removeuserstock/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApiremoveuserstock34B1F757"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Default/removeuserstock/POST/ApiPermission.SentistockCdkStackSentiStockApi5BC419F0.POST..removeuserstock": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApiremoveuserstockPOSTApiPermissionSentistockCdkStackSentiStockApi5BC419F0POSTremoveuserstockF7EE3E75"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Default/removeuserstock/POST/ApiPermission.Test.SentistockCdkStackSentiStockApi5BC419F0.POST..removeuserstock": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApiremoveuserstockPOSTApiPermissionTestSentistockCdkStackSentiStockApi5BC419F0POSTremoveuserstock0FEB6B9B"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Default/removeuserstock/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApiremoveuserstockPOST02C0403A"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Default/removeuserstock/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApiremoveuserstockOPTIONS86B163FD"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Default/gettopstocks/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApigettopstocks150E7A81"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Default/gettopstocks/GET/ApiPermission.SentistockCdkStackSentiStockApi5BC419F0.GET..gettopstocks": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApigettopstocksGETApiPermissionSentistockCdkStackSentiStockApi5BC419F0GETgettopstocksE0820750"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Default/gettopstocks/GET/ApiPermission.Test.SentistockCdkStackSentiStockApi5BC419F0.GET..gettopstocks": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApigettopstocksGETApiPermissionTestSentistockCdkStackSentiStockApi5BC419F0GETgettopstocksB52190DB"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Default/gettopstocks/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApigettopstocksGET2A4AF4FA"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Default/gettopstocks/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApigettopstocksOPTIONS3D2A9348"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Default/updatetopbyindex/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApiupdatetopbyindex930F1E78"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Default/updatetopbyindex/POST/ApiPermission.SentistockCdkStackSentiStockApi5BC419F0.POST..updatetopbyindex": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApiupdatetopbyindexPOSTApiPermissionSentistockCdkStackSentiStockApi5BC419F0POSTupdatetopbyindex991E030B"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Default/updatetopbyindex/POST/ApiPermission.Test.SentistockCdkStackSentiStockApi5BC419F0.POST..updatetopbyindex": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApiupdatetopbyindexPOSTApiPermissionTestSentistockCdkStackSentiStockApi5BC419F0POSTupdatetopbyindex7D24B598"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Default/updatetopbyindex/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApiupdatetopbyindexPOSTD43FD70A"
+          }
+        ],
+        "/SentistockCdkStack/SentiStockApi/Default/updatetopbyindex/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SentiStockApiupdatetopbyindexOPTIONS7ADF0536"
+          }
+        ],
+        "/SentistockCdkStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/SentistockCdkStack/CDKMetadata/Condition": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadataAvailable"
+          }
+        ],
+        "/SentistockCdkStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/SentistockCdkStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "SentistockCdkStack"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  }
+}
